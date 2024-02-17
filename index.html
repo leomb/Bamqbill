@@ -1,0 +1,438 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BAM Quick Invoice</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <div class="ipad">
+    <div class="container">
+      <div class="row mb-3">
+        <div class="col logo"><img src="img/BAM-small.svg" alt="BAM logo"></div>
+        <div class="col text-end">
+          INVOICE<br><span class="invoice-number" id="invoice-number"></span>
+        </div>
+      </div>
+    </div>
+
+    <form onsubmit="return false;">
+      <input type="hidden" name="inv_number" id="inv_number">
+      <input type="hidden" name="inv_total" id="inv_total">
+      <input type="hidden" name="registration" id="registration">
+      
+      <div class="container">
+        <div class="row mb-3">
+          <div class="col-12 col-md-4">
+            <label for="authorizations" class="form-label">W/O AUTHORIZATION (TAIL NUMBER)</label>
+            <select class="form-select attention" aria-label="W/O Authorizations" id="authorizations" name="authorizations">
+              <option value="" selected>Please choose...</option>
+              <option value="1">Test 1</option>
+              <option value="2">Test 2</option>
+              <option value="3">Test 3</option>
+            </select>
+            <label for="customer" class="form-label">CUSTOMER</label>
+            <textarea readonly class="form-control-plaintext" name="customer" id="customer" rows="4"></textarea>
+          </div>
+          <div class="col-12 col-md-4 card">
+            <div class="mb-3">
+              <label for="service-requested" class="form-label">SERVICE REQUESTED</label>
+              <textarea readonly class="form-control-plaintext" name="service-requested" id="service-requested" rows="4"></textarea>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <span class="section-label">LOCATION</span>
+            <div class="mb-4"><!-- group 3 radio buttons -->
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="location" id="bct" value="BCT" checked>
+                <label class="form-check-label" for="bct">
+                  BCT
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="location" id="sqr" value="SQR">
+                <label class="form-check-label" for="sqr">
+                  SQR
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="location" id="opf" value="OPF">
+                <label class="form-check-label" for="opf">
+                  OPF
+                </label>
+              </div>
+            </div><!-- end group 3 radio buttons -->
+            <div class="form-check ">
+              <input class="form-check-input" type="radio" name="location" id="other">
+              <input type="text" class="form-control" id="other-name"  maxlength="3">
+            </div>
+            <div class="form-check">
+              <input type="date" id="date" name="date" value="2024-01-09" class="mt-2">
+            </div>
+            <div class="form-check form-switch mt-3 text-right">
+              <input class="form-check-input" type="checkbox" role="switch" name="outOfCountry"  id="outOfCountry">
+              <label class="form-check-label" for="outOfCountry">Out of country</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row my-3 bluebar">
+          <div class="col">DESCRIPTION</div>
+          <div class="col text-end">AMOUNT $</div>
+        </div>
+      </div>
+
+      <section id="aogSection">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="189.00" data-display="amount-aog" name="aog" id="aog">
+                <label class="form-check-label" for="aog">
+                AOG Callout
+                </label>
+              </div>
+            </div>
+            <div class="col-md-2 amount" id="amount-aog"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="labor">
+        <div class="container">
+          <div class="row">
+            <span class="section-label">LABOR (HRS)</span>
+            <div class="col-md-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-weekday" value="wkdy" checked>
+                <label class="form-check-label" for="labor-weekday">Normal</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-off-hours" value="offh">
+                <label class="form-check-label" for="labor-off-hours">Overtime</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-weekend" value="wknd">
+                <label class="form-check-label" for="labor-weekend">Holiday</label>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-check">
+                <input class="form-control" type="number" data-display="amount-labor" name="labor-hrs" id="labor-hrs" data-cost="" value="0" min="0" max="10">
+                <label class="form-check-label" for="labor-hrs">
+                  Hrs.
+                </label>
+              </div>
+            </div>
+            <div class="col-md-2 amount" id="amount-labor"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="o2">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-check">
+              <input class="form-check-input" type="checkbox" data-cost="125.00" data-display="o2amount" name="o2-service" id="o2-service">
+              <label class="form-check-label" for="o2-service">
+                O2 Service
+              </label>
+              </div>
+            </div>
+            <div class="col-md-2 amount" id="o2amount"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="oilcheck">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="oilcheck-eng1" data-multiply="oil-qt1" data-cost="75.00" data-display="amount-eng-oil1" id="oil-engine1" name="oil-engine1">
+                <label class="form-check-label" for="oil-engine1">
+                  Engine-1 Oil Check
+                </label>
+              </div>
+            </div>
+            <div class="col-md-5 form-check">
+              <input class="form-control" disabled type="number" id="oil-qt1" name="oil-qt1" data-cost="5.00" data-display="amount-eng-oil1" value="0" min="0" max="10">
+              <label class="form-check-label" for="oil-qt1">
+                Engine-1 Oil Qts
+              </label>
+            </div>
+            <div class="col-md-2 amount" id="amount-eng-oil1"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="oilcheck-eng2" data-multiply="oil-qt2" data-cost="75.00" data-display="amount-eng-oil2" id="oil-engine2" name="oil-engine2">
+                 <label class="form-check-label" for="oil-engine2">
+                  Engine-2 Oil Check
+                </label>
+              </div>
+            </div>
+            <div class="col-md-5 form-check">
+              <input class="form-control" disabled type="number" id="oil-qt2" name="oil-qt2" data-cost="5.00" data-display="amount-eng-oil2" value="0" min="0" max="10">
+              <label class="form-check-label" for="oil-qt2">
+                Engine-2 Oil Qts
+              </label>
+            </div>
+            <div class="col-md-2 amount" id="amount-eng-oil2"></div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="oilcheck-eng3" data-multiply="oil-qt3" data-cost="75.00" data-display="amount-eng-oil3" id="oil-engine3" name="oil-engine3">
+              <label class="form-check-label" for="oil-engine3">
+                Engine-3 Oil Check
+              </label>
+              </div>
+            </div>
+            <div class="col-md-5 form-check">
+              <input class="form-control" disabled type="number" id="oil-qt3" name="oil-qt3" data-cost="5.00" data-display="amount-eng-oil3" value="0" min="0" max="10">
+              <label class="form-check-label" for="oil-qt3">
+                Engine-3 Oil Qts
+              </label>
+            </div>
+            <div class="col-md-2 amount" id="amount-eng-oil3"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="service">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-5">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="oilcheck-apu" data-multiply="oil-apu-qt" data-cost="75.00" data-display="amount-oil-apu" id="oil-apu" name="oil-apu">
+                <label class="form-check-label" for="oil-apu">
+                APU Oil Check
+                </label>
+              </div>
+            </div>
+            <div class="col-md-5 form-check">
+              <input class="form-control" disabled type="number" name="oil-apu-qt" id="oil-apu-qt" data-cost="5.00" data-display="amount-oil-apu" value="0" min="0" max="10">
+              <label class="form-check-label" for="oil-apu-qt">
+                APU Oil Qts
+              </label>
+            </div>
+            <div class="col-md-2 amount" id="amount-oil-apu"></div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="50.00" data-display="amount-tires" value="checkTires" id="tires" name="tires">
+                <label class="form-check-label" for="tires">
+                Tire Pressure
+                </label>
+              </div>
+            </div>
+            <div class="col-md-3 amount" id="amount-tires"></div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-9">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="n2service" data-cost="135.00" data-display="amount-n2" id="n2-service" name="n2-service">
+                <label class="form-check-label" for="n2-service">
+                N2 Service
+                </label>
+              </div>
+            </div>
+            <div class="col-md-3 amount" id="amount-n2"></div>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="rts">
+        <div class="container">
+          <div class="row">
+            <span class="section-label">RTS</span>
+            <div class="col-md-10">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" data-cost="0.00" data-display="amount-rts" name="rts" id="rtsfree" value="RTS: Free">
+                <label class="form-check-label" for="rtsfree">Free</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" data-cost="70.00" data-display="amount-rts" name="rts" id="signoff" value="Sign off">
+                <label class="form-check-label" for="signoff">Sign Off</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" data-cost="250.00" data-display="amount-rts" name="rts" id="logbook" value="Logbook">
+                <label class="form-check-label" for="logbook">Logbook</label>
+              </div>
+            </div>
+            <div class="col-md-2 amount" id="amount-rts"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="extrafee">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="25.00" data-display="amount-extra" value="Access Fee" name="extrafees[]" id="access-fee">
+                <label class="form-check-label" for="access-fee">
+                Access Fee $<span id="access-fee-label"></span>
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="45.00" data-display="amount-extra" value="TKS Fee" name="extrafees[]" id="tks">
+                <label class="form-check-label" for="tks">
+                TKS $<span id="tks-label"></span>
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="45.00" data-display="amount-extra" value="W/O Shipping Fee" name="extrafees[]" id="wo-shipping-fee">
+                <label class="form-check-label" for="wo-shipping-fee">
+                W/O Shipping $<span id="wo-shipping-label"></span>
+                </label>
+              </div>
+            </div>
+            <div class="col-md-3 amount" id="amount-extra"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="other">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="mb-3">
+                <label for="other-service" class="form-label">Other</label>
+                <input type="text" class="form-control" name="other-service" id="other-service" placeholder="Additional service description" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="mb-3">
+                <label for="additional-amount" class="form-label">&nbsp;</label>
+                <input
+                  type="text"
+                  class="form-control text-end"
+                  name="additional-amount"
+                  id="additional-amount"
+                />
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10 text-end">TOTAL</div>
+            <div class="col-md-2 amount-total" id="totalSum"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <span class="section-label">NOTES</span>
+              <textarea  class="form-control" name="notes" id="notes" rows="2"></textarea>
+            </div>
+            <div class="col-md-6">
+              <span class="section-label">SIGNATURE</span> <span class="section-label" id="signee"></span>
+              <div class="signature-small" id="signature-small"></div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <button disabled style="visibility: hidden; width:0px; margin-left:-1.75rem" ></button>
+            <div class="col d-flex justify-content-between">
+              <button class="btn btn-info" id="resetbtn" onclick="resetInvoice(this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+              </svg> Reset</button>
+              <button type="button" id="savebtn" class="btn btn-success" onclick="alert('Under construction...')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
+                <path d="M11 2H9v3h2z"/>
+                <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+              </svg> Save</button>
+              <button type="submit" id="sendbtn" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+              </svg> Send</button>
+              <button type="button" id="sendingbtn" disabled class="btn btn-primary hidden">
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_ajPY{transform-origin:center;animation:spinner_AtaB .75s infinite linear}@keyframes spinner_AtaB{100%{transform:rotate(360deg)}}</style><path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/><path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" class="spinner_ajPY"/></svg> Sending...</button>
+           </div>
+          </div>
+        </div>
+      </section>
+
+      <dialog id="sig">
+        <div class="close" id="txClose">&times;</div>
+        <div>
+          <div class="row">
+            <div class="col">
+              <p class="text-center">
+                SIGNATURE <span id="signee2"></span>
+              </p>
+              <canvas id="signature" class="signature" width="500" height="250"></canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col d-flex justify-content-between">
+                <button class="btn btn-light" id="clear">CLEAR</button>
+                <button class="btn btn-primary" id="accept">ACCEPT</button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </form>
+
+    <dialog id="thankyou">
+      <div>
+        <div class="row">
+          <div class="col text-center">
+            <h2 class="my-5">Thank you!</h2>
+            <p class="my-5 px-5">Invoice <span id="txInvoice"></span> has been sent to<br><span id="txCustEmail"></span> and to BAM Accounting.</p>
+          </div>
+        </div>
+        <fiv>
+          <div class="row">
+            <div class="col">
+              <button id="close-thankyou" class="btn btn-primary">CLOSE</button>
+            </div>
+          </div>
+        </fiv>
+      </div>
+    </dialog>
+
+  </div><!-- end ipad -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js" integrity="sha512-5KVKd2m3yToOC3/2aqO7vbLn5qWWsrZrJFhpqPBdngWgSKf7CIgo9OURGlcooN9LaG0kYRb5gUAMYtPFyftMcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/vendor/bootstrap.min.js"></script>
+  <script src="js/app.js?v=1.26"></script>
+
+</body>
+
+</html>
