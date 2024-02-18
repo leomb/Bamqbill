@@ -17,36 +17,24 @@ let invoiceData = new FormData(document.forms[0]);
 
 // rates
 const varRates = {
-    usa: {
+    "usa": {
         "wkdy": {
             "hrs": 177.00,
             "aog": 189.00,
             "o2": 250.00,
-            "n2": 250.00,
-            "tire": 250.00,
-            "oil": 250.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 250.00
         },
         "offh": {
             "hrs": 265.50,
             "aog": 189.00,
             "o2": 300.00,
-            "n2": 300.00,
-            "tire": 300.00,
-            "oil": 300.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 300.00
         },
         "wknd": {
             "hrs": 274.00,
             "aog": 189.00,
             "o2": 300.00,
-            "n2": 300.00,
-            "tire": 300.00,
-            "oil": 300.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 300.00
         }
     },
     "foreign": {
@@ -54,47 +42,42 @@ const varRates = {
             "hrs": 197.00,
             "aog": 189.00,
             "o2": 250.00,
-            "n2": 250.00,
-            "tire": 250.00,
-            "oil": 250.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 250.00
         },
         "offh": {
             "hrs": 295.50,
             "aog": 189.00,
             "o2": 300.00,
-            "n2": 300.00,
-            "tire": 300.00,
-            "oil": 300.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 300.00
         },
         "wknd": {
             "hrs": 394.00,
             "aog": 189.00,
             "o2": 300.00,
-            "n2": 300.00,
-            "tire": 300.00,
-            "oil": 300.00,
-            "fuel": 6.46,
-            "fueladd": 9.14
+            "oil": 300.00
         }
     },
 }
+
 const flatRates = {
     "qt": 25.00,
     "rts": [0.00, 354.00, 531.00],
     "woship": 22.48,
     "access": 25.00,
-    "tks": 45.00
+    "tks": 45.00,
+    "tire": 300.00,
+    "n2": 300.00,
+    "lav": 50.00,
+    "fuel": [6.46, 9.14]
 }
 
 // set values
 setRtsCosts(flatRates);
+setFuelCosts(flatRates);
 setExtraCosts(flatRates);
 setOilCosts(flatRates);
 setVariableCosts(varRates[country][laborRate]);
+setBodyCosts(flatRates);
 
 
 // W/O Authorization
@@ -147,14 +130,14 @@ const signaturePad = new SignaturePad(canvas, {
 
 // Checkboxes, radios, and inputs
 const oilServices = document.querySelectorAll('input[name^="oil"]');
-const tireN2 = document.querySelectorAll('input[name="tires"],input[name="n2-service"]');
-const quantities = document.querySelectorAll('input[type="number"]:not(#labor-hrs');
+const tireN2Lav = document.querySelectorAll('input[name="tires"],input[name="n2-service"],input[name="lav-service"]');
+const quantities = document.querySelectorAll('input[type="number"]:not(#labor-hrs,#fuel-qty');
 const qtylabor = document.getElementById('labor-hrs');
 const radios = document.querySelectorAll('input[type="radio"]:not([name=location])');
 const locations = document.querySelectorAll('input[name=location]');
 const laborBase = document.querySelectorAll('input[name=labor]');
 const rts = document.querySelectorAll('input[name=rts]');
-const fuel = document.querySelector('input[name=fuel');
+const fuel = document.querySelectorAll('input[name=fuel');
 const qtyfuel = document.getElementById('fuel-qty');
 const otherChecks = document.querySelectorAll('input[name="aog"],input[name="extrafees[]"],input[name="o2-service"]');
 const otherService = document.getElementById('additional-amount');
@@ -195,7 +178,7 @@ oilServices.forEach(oilService => {
     });
 });
 
-tireN2.forEach(serv => {
+tireN2Lav.forEach(serv => {
     serv.addEventListener("change", () => {
         let operation = serv.checked ? "+" : "-";
         calculateBill(serv.dataset['cost'], serv.dataset['display'], operation);
@@ -246,12 +229,18 @@ rts.forEach(radio => {
 
 fuel.forEach(gas => {
     gas.addEventListener("change", () => {
-        var currentValue = document.getElementById('amount-fuel').innerHTML;
-        let currentCost = currentValue == "" ? 0 : Number(currentValue);
-        let operation = "+"
-        calculateBill(Number(radio.dataset['cost']) - currentCost, radio.dataset['display'], operation);
+        var qty = document.getElementById('fuel-qty');
+        qty.disabled = false;
+        let operation = "*"
+        calculateBill(Number(Number(gas.dataset['cost']) * Number(qty.value)), gas.dataset['display'], operation);
         return;
     });
+});
+
+qtyfuel.addEventListener("change", () => {
+    let operation = "*";
+    let gas = document.querySelector('input[name="fuel"]:checked');
+    calculateBill(Number(Number(gas.dataset['cost']) * Number(qtyfuel.value)), gas.dataset['display'], operation);
 });
 
 qtylabor.addEventListener("change", () => {
@@ -384,6 +373,23 @@ function setRtsCosts(rates) {
     document.getElementById('logbook').dataset['cost'] = rates.rts[2];
 }
 
+// set fuel costs
+function setFuelCosts(rates) {
+    document.getElementById('jeta').dataset['cost'] = rates.fuel[0];
+    document.getElementById('jetaplus').dataset['cost'] = rates.fuel[1];
+}
+
+// set service costs on body
+function setBodyCosts(rates) {
+    document.getElementById('tires').dataset['cost'] = rates.tire;
+    document.getElementById('tire-fee-label').innerHTML = rates.tire;
+    document.getElementById('n2-service').dataset['cost'] = rates.n2;
+    document.getElementById('n2-fee-label').innerHTML = rates.n2;
+    document.getElementById('lav-service').dataset['cost'] = rates.lav;
+    document.getElementById('lav-fee-label').innerHTML = rates.lav;
+}
+
+// set extra costs
 function setExtraCosts(rates) {
     document.getElementById('access-fee').dataset['cost'] = rates.access;
     document.getElementById('access-fee-label').innerHTML = rates.access;
@@ -393,6 +399,7 @@ function setExtraCosts(rates) {
     document.getElementById('wo-shipping-label').innerHTML = rates.woship;
 }
 
+// set engine oil costs
 function setOilCosts(rates) {
     document.getElementById('oil-qt1').dataset['cost'] = rates.qt;
     document.getElementById('oil-qt2').dataset['cost'] = rates.qt;
@@ -408,8 +415,6 @@ function setVariableCosts(rates) {
     document.getElementById('oil-engine2').dataset['cost'] = rates.oil;
     document.getElementById('oil-engine3').dataset['cost'] = rates.oil;
     document.getElementById('oil-apu').dataset['cost'] = rates.oil;
-    document.getElementById('tires').dataset['cost'] = rates.tire;
-    document.getElementById('n2-service').dataset['cost'] = rates.n2;
 }
 
 function updateInvoice(rates) {
@@ -509,15 +514,14 @@ if ( form !== null ) {
   form.addEventListener('submit', function(e) {
     console.log("SUBMIT");
     if (validate(form)) {
-        sendEmail( e );
-        thankyou();
+        sendEmail();
     }
     // Prevent default posting of form
     e.preventDefault();
   });
 }
 
-function sendEmail( event ){
+function sendEmail(){
   var ajax = new XMLHttpRequest();
   var formdata = new FormData( document.querySelector("form") );
   formdata.append("operation","registerBillAndSend");
@@ -561,4 +565,19 @@ function validate(form) {
     if (form.authorizations.value == "") { form.authorizations.focus(); alert("Please choose a tail number."); return false; }
     if (undefined === form['amount-labor'] || form['amount-labor'].value == "") { alert("Labor hours is zero!"); return false; }
     return true;
+}
+
+function confirm() {
+    const confirmDialog = document.getElementById("confirmBtn");
+    confirmDialog.showModal();
+    const cancelButton = confirmDialog.querySelector("#cancelBtn");
+    cancelButton.addEventListener("click", () => {
+        confirmDialog.close(); 
+    });
+    const confirmButton = confirmDialog.querySelector("#confirmBtn");
+    confirmButton.addEventListener("click", () => {
+        confirmDialog.close();
+        sendEmail(); 
+    });
+
 }

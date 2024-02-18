@@ -244,27 +244,33 @@
             </div>
             <div class="col-md-2 amount" id="amount-oil-apu"></div>
           </div>
+        </div>
+      </section>
+
+      <section id="tireN2Lav">
+        <div class="container">
           <div class="row">
             <div class="col-md-9">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" data-cost="50.00" data-display="amount-tires" value="checkTires" id="tires" name="tires">
+                <input class="form-check-input" type="checkbox" data-cost="25.00" data-display="amount-body" value="Check Tires" name="tires" id="tires">
                 <label class="form-check-label" for="tires">
-                Tire Pressure
+                Tire Pressure $<span id="tire-fee-label"></span>
                 </label>
               </div>
-            </div>
-            <div class="col-md-3 amount" id="amount-tires"></div>
-          </div>
-          <div class="row mt-3">
-            <div class="col-md-9">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" value="n2service" data-cost="135.00" data-display="amount-n2" id="n2-service" name="n2-service">
-                <label class="form-check-label" for="n2-service">
-                N2 Service
+                <input class="form-check-input" type="checkbox" data-cost="125.00" data-display="amount-body" value="N2 Service" name="n2-service" id="n2-service">
+                <label class="form-check-label" for="tks">
+                  N2 Service $<span id="n2-fee-label"></span>
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" data-cost="50.00" data-display="amount-body" value="Lav Service" name="lav-service" id="lav-service">
+                <label class="form-check-label" for="wo-shipping-fee">
+                Lav Service $<span id="lav-fee-label"></span>
                 </label>
               </div>
             </div>
-            <div class="col-md-3 amount" id="amount-n2"></div>
+            <div class="col-md-3 amount" id="amount-body"></div>
           </div>
         </div>
       </section>
@@ -297,12 +303,8 @@
           <div class="row">
             <div class="col-md-5">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" data-cost="0.00" data-display="amount-fuel" name="fuel" id="nofuel" value="No Fuel">
-                <label class="form-check-label" for="nofuel">No Fuel</label>
-              </div>
-              <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" data-cost="6.46" data-display="amount-fuel" name="fuel" id="jeta" value="Jet A Fuel">
-                <label class="form-check-label" for="jeta">Jet A</label>
+                <label class="form-check-label" for="jeta">Jet A Fuel</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" data-cost="9.14" data-display="amount-fuel" name="fuel" id="jetaplus" value="Jet A w/Additives">
@@ -310,7 +312,7 @@
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" id="fuel-qty" name="fuel-qty" data-cost="6.46" data-display="amount-fuel" value="0" min="0">
+              <input class="form-control" disabled type="number" id="fuel-qty" name="fuel-qty" data-display="amount-fuel" step="1.0" value="0" min="0">
               <label class="form-check-label" for="oil-qt2">
                 Gallons
               </label>
@@ -432,6 +434,24 @@
       </dialog>
     </form>
 
+    <dialog id="confirm">
+      <div>
+        <div class="row">
+          <div class="col text-center">
+            <h2 class="my-5">Please confirm...</h2>
+            <p class="my-5 px-5">Invoice <span id="txInvoice"></span> will be sent to<br><span id="txCustEmail"></span> and to BAM Accounting.</p>
+          </div>
+        </div>
+        <div>
+          <div class="row">
+            <div class="col d-flex justify-content-between">
+              <button class="btn btn-light" id="cancelBtn" onclick="">CANCEL</button>
+              <button class="btn btn-primary" id="confirmBtn">CONFIRM</button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
     <dialog id="thankyou">
       <div>
         <div class="row">
@@ -454,7 +474,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js" integrity="sha512-5KVKd2m3yToOC3/2aqO7vbLn5qWWsrZrJFhpqPBdngWgSKf7CIgo9OURGlcooN9LaG0kYRb5gUAMYtPFyftMcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/vendor/bootstrap.min.js"></script>
-  <script src="js/app.js?v=1.26"></script>
+  <script src="js/app.js"></script>
 
 </body>
 
