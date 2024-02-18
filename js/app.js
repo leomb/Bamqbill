@@ -24,7 +24,9 @@ const varRates = {
             "o2": 250.00,
             "n2": 250.00,
             "tire": 250.00,
-            "oil": 250.00
+            "oil": 250.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         },
         "offh": {
             "hrs": 265.50,
@@ -32,7 +34,9 @@ const varRates = {
             "o2": 300.00,
             "n2": 300.00,
             "tire": 300.00,
-            "oil": 300.00
+            "oil": 300.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         },
         "wknd": {
             "hrs": 274.00,
@@ -40,7 +44,9 @@ const varRates = {
             "o2": 300.00,
             "n2": 300.00,
             "tire": 300.00,
-            "oil": 300.00
+            "oil": 300.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         }
     },
     "foreign": {
@@ -50,7 +56,9 @@ const varRates = {
             "o2": 250.00,
             "n2": 250.00,
             "tire": 250.00,
-            "oil": 250.00
+            "oil": 250.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         },
         "offh": {
             "hrs": 295.50,
@@ -58,7 +66,9 @@ const varRates = {
             "o2": 300.00,
             "n2": 300.00,
             "tire": 300.00,
-            "oil": 300.00
+            "oil": 300.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         },
         "wknd": {
             "hrs": 394.00,
@@ -66,7 +76,9 @@ const varRates = {
             "o2": 300.00,
             "n2": 300.00,
             "tire": 300.00,
-            "oil": 300.00
+            "oil": 300.00,
+            "fuel": 6.46,
+            "fueladd": 9.14
         }
     },
 }
@@ -142,6 +154,8 @@ const radios = document.querySelectorAll('input[type="radio"]:not([name=location
 const locations = document.querySelectorAll('input[name=location]');
 const laborBase = document.querySelectorAll('input[name=labor]');
 const rts = document.querySelectorAll('input[name=rts]');
+const fuel = document.querySelector('input[name=fuel');
+const qtyfuel = document.getElementById('fuel-qty');
 const otherChecks = document.querySelectorAll('input[name="aog"],input[name="extrafees[]"],input[name="o2-service"]');
 const otherService = document.getElementById('additional-amount');
 const origin = document.getElementById('outOfCountry');
@@ -223,6 +237,16 @@ origin.addEventListener("change", () => {
 rts.forEach(radio => {
     radio.addEventListener("change", () => {
         var currentValue = document.getElementById('amount-rts').innerHTML;
+        let currentCost = currentValue == "" ? 0 : Number(currentValue);
+        let operation = "+"
+        calculateBill(Number(radio.dataset['cost']) - currentCost, radio.dataset['display'], operation);
+        return;
+    });
+});
+
+fuel.forEach(gas => {
+    gas.addEventListener("change", () => {
+        var currentValue = document.getElementById('amount-fuel').innerHTML;
         let currentCost = currentValue == "" ? 0 : Number(currentValue);
         let operation = "+"
         calculateBill(Number(radio.dataset['cost']) - currentCost, radio.dataset['display'], operation);
