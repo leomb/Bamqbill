@@ -514,7 +514,7 @@ if ( form !== null ) {
   form.addEventListener('submit', function(e) {
     console.log("SUBMIT");
     if (validate(form)) {
-        sendEmail();
+        confirm();
     }
     // Prevent default posting of form
     e.preventDefault();
@@ -568,7 +568,7 @@ function validate(form) {
 }
 
 function confirm() {
-    const confirmDialog = document.getElementById("confirmBtn");
+    const confirmDialog = document.getElementById("confirm");
     confirmDialog.showModal();
     const cancelButton = confirmDialog.querySelector("#cancelBtn");
     cancelButton.addEventListener("click", () => {
