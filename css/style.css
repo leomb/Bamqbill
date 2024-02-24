@@ -173,6 +173,17 @@ textarea {
   font-size: 0.9em;
   letter-spacing: 0.2em;
 }
+.ratebox table {
+  margin: 0 auto;
+}
+input[type=number] {
+  box-shadow: inset 3px 3px 3px rgba(32, 91, 118, 0.4);
+  border-radius: 5px;
+  border-color: transparent;
+  border-width: 0px;
+  padding: 2px;
+  text-indent: 5px;
+}
 
 /* ==========================================================================
    Helper classes
