@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -41,7 +41,7 @@
       
       <div class="container">
         <div class="row mb-3">
-          <div class="col-12 col-md-4">
+          <div class="col-12 col-lg-4">
             <label for="authorizations" class="form-label">W/O AUTHORIZATION (TAIL NUMBER)</label>
             <select class="form-select attention" aria-label="W/O Authorizations" id="authorizations" name="authorizations">
               <option value="" selected>Please choose...</option>
@@ -128,11 +128,11 @@
                 <label class="form-check-label" for="labor-weekday">Normal</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-off-hours" value="offh">
+                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-off-hours" value="over">
                 <label class="form-check-label" for="labor-off-hours">Overtime</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-weekend" value="wknd">
+                <input class="form-check-input" type="radio" name="labor" data-multiply="labor-hrs" id="labor-weekend" value="holi">
                 <label class="form-check-label" for="labor-weekend">Holiday</label>
               </div>
             </div>
@@ -177,7 +177,7 @@
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" id="oil-qt1" name="oil-qt1" data-cost="5.00" data-display="amount-eng-oil1" value="0" min="0" max="10">
+              <input class="form-control" disabled type="number" id="oil-qt1" name="oil-qt1" data-cost="5.00" data-display="amount-eng-oil1" value="0" min="0" max="10" step="0.1">
               <label class="form-check-label" for="oil-qt1">
                 Engine-1 Oil Qts
               </label>
@@ -196,7 +196,7 @@
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" id="oil-qt2" name="oil-qt2" data-cost="5.00" data-display="amount-eng-oil2" value="0" min="0" max="10">
+              <input class="form-control" disabled type="number" id="oil-qt2" name="oil-qt2" data-cost="5.00" data-display="amount-eng-oil2" value="0" min="0" max="10" step="0.1">
               <label class="form-check-label" for="oil-qt2">
                 Engine-2 Oil Qts
               </label>
@@ -215,7 +215,7 @@
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" id="oil-qt3" name="oil-qt3" data-cost="5.00" data-display="amount-eng-oil3" value="0" min="0" max="10">
+              <input class="form-control" disabled type="number" id="oil-qt3" name="oil-qt3" data-cost="5.00" data-display="amount-eng-oil3" value="0" min="0" max="10" step="0.1">
               <label class="form-check-label" for="oil-qt3">
                 Engine-3 Oil Qts
               </label>
@@ -237,7 +237,7 @@
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" name="oil-apu-qt" id="oil-apu-qt" data-cost="5.00" data-display="amount-oil-apu" value="0" min="0" max="10">
+              <input class="form-control" disabled type="number" name="oil-apu-qt" id="oil-apu-qt" data-cost="5.00" data-display="amount-oil-apu" value="0" min="0" max="10" step="0.1">
               <label class="form-check-label" for="oil-apu-qt">
                 APU Oil Qts
               </label>
@@ -247,27 +247,27 @@
         </div>
       </section>
 
-      <section id="tireN2Lav">
+      <section id="bodyservice">
         <div class="container">
           <div class="row">
             <div class="col-md-9">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" data-cost="25.00" data-display="amount-body" value="Check Tires" name="tires" id="tires">
+                <input class="form-check-input" type="checkbox" data-cost="25.00" data-display="amount-body" value="Check Tires" name="body[]" id="tires">
                 <label class="form-check-label" for="tires">
                 Tire Pressure $<span id="tire-fee-label"></span>
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" data-cost="125.00" data-display="amount-body" value="N2 Service" name="n2-service" id="n2-service">
-                <label class="form-check-label" for="tks">
+                <input class="form-check-input" type="checkbox" data-cost="125.00" data-display="amount-body" value="N2 Service" name="body[]" id="n2-service">
+                <label class="form-check-label" for="n2-service">
                   N2 Service $<span id="n2-fee-label"></span>
                 </label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" data-cost="50.00" data-display="amount-body" value="Lav Service" name="lav-service" id="lav-service">
-                <label class="form-check-label" for="wo-shipping-fee">
+                <input class="form-check-input" type="checkbox" data-cost="50.00" data-display="amount-body" value="Lav Service" name="body[]" id="lav-service">
+                <label class="form-check-label" for="lav-service">
                 Lav Service $<span id="lav-fee-label"></span>
-                </label>
+                </label>  
               </div>
             </div>
             <div class="col-md-3 amount" id="amount-body"></div>
@@ -303,16 +303,16 @@
           <div class="row">
             <div class="col-md-5">
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" data-cost="6.46" data-display="amount-fuel" name="fuel" id="jeta" value="Jet A Fuel">
+                <input class="form-check-input" type="radio" data-cost="6.46" data-display="amount-fuel" name="fuel" id="jeta" value="Jet A Fuel (Gallons)">
                 <label class="form-check-label" for="jeta">Jet A Fuel</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" data-cost="9.14" data-display="amount-fuel" name="fuel" id="jetaplus" value="Jet A w/Additives">
+                <input class="form-check-input" type="radio" data-cost="9.14" data-display="amount-fuel" name="fuel" id="jetaplus" value="Jet A Fuel w/Additives (Gallons)">
                 <label class="form-check-label" for="jetaplus">Jet A w/Additives</label>
               </div>
             </div>
             <div class="col-md-5 form-check">
-              <input class="form-control" disabled type="number" id="fuel-qty" name="fuel-qty" data-display="amount-fuel" step="1.0" value="0" min="0">
+              <input class="form-control" disabled type="number" id="fuel-qty" name="fuel-qty" data-display="amount-fuel" step="0.1" value="0" min="0">
               <label class="form-check-label" for="oil-qt2">
                 Gallons
               </label>
@@ -413,6 +413,10 @@
         </div>
       </section>
 
+      <section class="hidden">
+        <div><input type="text" name="signatureFile" id="signatureFile" /></div>
+      </section>
+
       <dialog id="sig">
         <div class="close" id="txClose">&times;</div>
         <div>
@@ -469,8 +473,8 @@
         </fiv>
       </div>
     </dialog>
-
   </div><!-- end ipad -->
+  <p class="mt-3 text-center"><a href="bamadmin.html">>>> View ADMIN (for testing) >>></a></p>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js" integrity="sha512-5KVKd2m3yToOC3/2aqO7vbLn5qWWsrZrJFhpqPBdngWgSKf7CIgo9OURGlcooN9LaG0kYRb5gUAMYtPFyftMcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/vendor/bootstrap.min.js"></script>
