@@ -64,13 +64,14 @@ function registerBillAndSend() {
 	$description['oil-engine2'] = ["Oil check Engine 2, + Qts. of Oil",$_REQUEST['oil-qt2'],$_REQUEST['amount-eng-oil2']];
 	$description['oil-engine3'] = ["Oil check Engine 3, + Qts. of Oil",$_REQUEST['oil-qt3'],$_REQUEST['amount-eng-oil3']];
 	$description['oil-apu'] = ["Oil check APU, + Qts. of Oil",$_REQUEST['oil-apu-qt'],$_REQUEST['amount-oil-apu']];
-	$description['tires'] = ["Tire pressure check"," ",$_REQUEST['amount-tires']];
-	$description['n2-service'] = ["Nitrogen service"," ",$_REQUEST['amount-n2']];
+	$description['fuel'] = [$_REQUEST['fuel'], $_REQUEST['fuel-qty'], $_REQUEST['amount-fuel']];
 	$description['other-service'] = [$_REQUEST['other-service']," ",$_REQUEST['additional-amount']];
 	
 	// bundle descriptions for extra non-service fees
 	$x_fees = implode(" + ", $_REQUEST['extrafees'] );
 	$description['extrafees'] = [$x_fees, " ", $_REQUEST['amount-extra']];
+	$body_fees = implode(" + ", $_REQUEST['body']);
+	$description['body'] = [$body_fees, " ", $_REQUEST['amount-body']];
 	$text_message = "";
 	$html_message = "";
 
@@ -113,14 +114,22 @@ https://bocamx.com/pages/payonline.php \n\n";
 $customer = nl2br($_REQUEST['customer']);
 
 $msg = <<<MSG
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<!--[if !mso]><!-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!--<![endif]-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AOG Invoice</title>
+	<!--[if (gte mso 9)|(IE)]>
+	<style type="text/css">
+		table {border-collapse: collapse;}
+	</style>
+	<![endif]-->
     <style>
-        body { background: #7e7e7e; color: #707070; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;}
+        body { background: #efefef; color: #707070; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;}
         table { background-color: white; width: 580px; margin: 10px auto; }
         td { padding: 5px 20px; }
         .btn { width: 200px; padding: 15px; margin: 10px auto; background: #283779; color: white; font-weight: bold; text-align: center;}
@@ -282,3 +291,81 @@ function exceptions_error_handler($severity, $message, $filename, $lineno) {
 }
 
 set_error_handler('exceptions_error_handler');
+
+function createRatesFile() {
+	// Process form data
+	$varRates = array(
+		"usa" => array(
+			"wkdy" => array(
+				"hrs" => $_REQUEST['usa-wkdy-hrs'],
+				"aog" => $_REQUEST['usa-wkdy-aog'],
+				"o2"  => $_REQUEST['usa-wkdy-o2'],
+				"oil" => $_REQUEST['usa-wkdy-oil']
+			),
+			"over" => array(
+				"hrs" => $_REQUEST['usa-over-hrs'],
+				"aog" => $_REQUEST['usa-over-aog'],
+				"o2"  => $_REQUEST['usa-over-o2'],
+				"oil" => $_REQUEST['usa-over-oil']
+			),
+			"holi" => array(
+				"hrs" => $_REQUEST['usa-holi-hrs'],
+				"aog" => $_REQUEST['usa-holi-aog'],
+				"o2"  => $_REQUEST['usa-holi-o2'],
+				"oil" => $_REQUEST['usa-holi-oil']
+			)
+		),
+		"foreign" => array(
+			"wkdy" => array(
+				"hrs" => $_REQUEST['foreign-wkdy-hrs'],
+				"aog" => $_REQUEST['foreign-wkdy-aog'],
+				"o2"  => $_REQUEST['foreign-wkdy-o2'],
+				"oil" => $_REQUEST['foreign-wkdy-oil']
+			),
+			"over" => array(
+				"hrs" => $_REQUEST['foreign-over-hrs'],
+				"aog" => $_REQUEST['foreign-over-aog'],
+				"o2"  => $_REQUEST['foreign-over-o2'],
+				"oil" => $_REQUEST['foreign-over-oil']
+			),
+			"holi" => array(
+				"hrs" => $_REQUEST['foreign-holi-hrs'],
+				"aog" => $_REQUEST['foreign-holi-aog'],
+				"o2"  => $_REQUEST['foreign-holi-o2'],
+				"oil" => $_REQUEST['foreign-holi-oil']
+			)
+		)
+	);
+	
+	$flatRates = array("qt" => $_REQUEST['qt'],
+		"rts" => array(
+			$_REQUEST['rtsfree'],
+			$_REQUEST['signoff'],
+			$_REQUEST['logbook']),
+		"woship"	=> $_REQUEST['woship'],
+		"access"	=> $_REQUEST['access'],
+		"tks"		=> $_REQUEST['tks'],
+		"tire"		=> $_REQUEST['tire'],
+		"n2"		=> $_REQUEST['n2'],
+		"lav"		=> $_REQUEST['lav'],
+		"fuel" => array(
+			$_REQUEST['jeta'],
+			$_REQUEST['jetaplus'])
+	);
+	
+	// Prepare response data
+	$response = array(
+		$varRates, $flatRates
+	);
+	
+    // Encode the data to JSON format
+	$json_data = json_encode($response, JSON_PRETTY_PRINT);
+
+	// Write a file with the json object
+	$file = '../bamrates.json';
+	file_put_contents($file, $json_data);
+
+	// Send JSON response
+	header('Content-Type: application/json');
+	echo json_encode($response);
+}
