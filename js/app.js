@@ -1,5 +1,8 @@
 window.addEventListener('load', () => {
-  getData();
+  getData(); // get the 12 most recent work order authorizations from the database
+  fetch('./bamrates.json')
+    .then((response) => response.json())
+    .then((json) => initRates(json)); // get the rates to use in the invoice
 });
 
 // Date function
@@ -16,69 +19,23 @@ let laborRate = document.forms[0].labor.value;
 let invoiceData = new FormData(document.forms[0]);
 
 // rates
-const varRates = {
-    "usa": {
-        "wkdy": {
-            "hrs": 177.00,
-            "aog": 189.00,
-            "o2": 250.00,
-            "oil": 250.00
-        },
-        "offh": {
-            "hrs": 265.50,
-            "aog": 189.00,
-            "o2": 300.00,
-            "oil": 300.00
-        },
-        "wknd": {
-            "hrs": 274.00,
-            "aog": 189.00,
-            "o2": 300.00,
-            "oil": 300.00
-        }
-    },
-    "foreign": {
-        "wkdy": {
-            "hrs": 197.00,
-            "aog": 189.00,
-            "o2": 250.00,
-            "oil": 250.00
-        },
-        "offh": {
-            "hrs": 295.50,
-            "aog": 189.00,
-            "o2": 300.00,
-            "oil": 300.00
-        },
-        "wknd": {
-            "hrs": 394.00,
-            "aog": 189.00,
-            "o2": 300.00,
-            "oil": 300.00
-        }
-    },
-}
+var varRates, flatRates;
 
-const flatRates = {
-    "qt": 25.00,
-    "rts": [0.00, 354.00, 531.00],
-    "woship": 22.48,
-    "access": 25.00,
-    "tks": 45.00,
-    "tire": 300.00,
-    "n2": 300.00,
-    "lav": 50.00,
-    "fuel": [6.46, 9.14]
+function initRates(file) {
+    varRates = file[0];
+    flatRates = file[1];
+    setValues(); // put the rates in the input attributes on the form
 }
 
 // set values
-setRtsCosts(flatRates);
-setFuelCosts(flatRates);
-setExtraCosts(flatRates);
-setOilCosts(flatRates);
-setVariableCosts(varRates[country][laborRate]);
-setBodyCosts(flatRates);
-
+function setValues() {
+    setRtsCosts(flatRates);
+    setFuelCosts(flatRates);
+    setExtraCosts(flatRates);
+    setOilCosts(flatRates);
+    setVariableCosts(varRates[country][laborRate]);
+    setBodyCosts(flatRates);
+}
 
 // W/O Authorization
 const authorization = document.getElementById('authorizations');
@@ -130,7 +87,7 @@ const signaturePad = new SignaturePad(canvas, {
 
 // Checkboxes, radios, and inputs
 const oilServices = document.querySelectorAll('input[name^="oil"]');
-const tireN2Lav = document.querySelectorAll('input[name="tires"],input[name="n2-service"],input[name="lav-service"]');
+const bodyservice = document.querySelectorAll('input[name="body[]"]');
 const quantities = document.querySelectorAll('input[type="number"]:not(#labor-hrs,#fuel-qty');
 const qtylabor = document.getElementById('labor-hrs');
 const radios = document.querySelectorAll('input[type="radio"]:not([name=location])');
@@ -178,7 +135,7 @@ oilServices.forEach(oilService => {
     });
 });
 
-tireN2Lav.forEach(serv => {
+bodyservice.forEach(serv => {
     serv.addEventListener("change", () => {
         let operation = serv.checked ? "+" : "-";
         calculateBill(serv.dataset['cost'], serv.dataset['display'], operation);
@@ -324,6 +281,9 @@ acceptCanvas.addEventListener("click", (e) => {
     let signatureData = signaturePad.toDataURL();
     signatureImage.setAttribute("src", signatureData);
     dialogOpen.appendChild(signatureImage);
+
+    const signatureFile = document.getElementById("signatureFile");
+    signatureFile.value = signatureData;
     signaturePad.clear();
     dialog.close();
     e.preventDefault();
@@ -334,7 +294,6 @@ locations.forEach( loc => {
     loc.addEventListener("change", () => {
         const authorization = document.querySelector('#authorizations');
         let id = authorization.value;
-        let customer = getCustomer(id);
 
         const location = loc.value;
         const invoiceDate = document.getElementById('date').value.substring(5);
@@ -364,6 +323,8 @@ function resetInvoice() {
     document.getElementById('inv_number').value = "";
     document.getElementById('inv_total').value = "";
     document.getElementById('registration').value = "";
+    document.querySelectorAll('input[type=number]').forEach((n) => {n.value = 0;});
+    document.querySelectorAll('input[type=number]:not(#labor-hrs)').forEach((n) => {n.disabled = true;});
 }
 
 // set data costs
@@ -419,7 +380,7 @@ function setVariableCosts(rates) {
 
 function updateInvoice(rates) {
     setVariableCosts(rates);
-    const variableElements = ['oil-engine1','oil-engine2','oil-engine3','oil-apu','o2-service','n2-service','tires'];
+    const variableElements = ['oil-engine1','oil-engine2','oil-engine3','oil-apu','o2-service'];
     variableElements.forEach(elm => {
         console.log(`Updating ${elm}`);
         elm = document.getElementById(elm);
@@ -469,7 +430,7 @@ function getData(){
   ajax.addEventListener("load", completeHandlerSms, false);
   ajax.addEventListener("error", errorHandlerSms, false);
   ajax.addEventListener("abort", abortHandlerSms, false);
-  ajax.open("POST", "process/ajax.php");
+  ajax.open("POST", "../bamqbill/process/ajax.php");
   ajax.send(formdata);
 }
 function completeHandlerSms(event){
@@ -514,6 +475,8 @@ if ( form !== null ) {
   form.addEventListener('submit', function(e) {
     console.log("SUBMIT");
     if (validate(form)) {
+        document.getElementById('sendbtn').classList.add('hidden');
+        document.getElementById('sendingbtn').classList.remove('hidden');
         confirm();
     }
     // Prevent default posting of form
@@ -536,6 +499,8 @@ function completeHandler(event){
   thankyou();
   console.log("RFQ Response: %s", event.target.responseText);
   resetInvoice();
+  document.getElementById('sendbtn').classList.remove('hidden');
+  document.getElementById('sendingbtn').classList.add('hidden');
 }
 function errorHandler(event){
   console.log("Upload Failed: " + event.target.responseText);
