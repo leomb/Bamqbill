@@ -51,11 +51,12 @@ function populate(e) {
     document.getElementById('txCustEmail').innerHTML = customer.email;
     setHiddenField('customer_email', customer.email);
     setHiddenField('registration', customer.registration);
-    
+    setHiddenField('customer_name', customer.signature);
+   
     const location = document.forms[0].location.value;
     const invoiceDate = document.getElementById('date').value.substring(5);
     const invoiceName = "INV" + document.getElementById('date').value.substring(5,2);
-    document.getElementById('invoice-number').innerHTML = `${invoiceName +  invoiceDate}/${location}`;
+    document.getElementById('invoice-number').innerHTML = `${invoiceName +  invoiceDate}${location}`;
     setHiddenField('inv_number', document.getElementById('invoice-number').innerHTML);
 
     if (e.target.value > "") {
@@ -82,7 +83,8 @@ const canvas = document.querySelector("canvas");
 const signaturePad = new SignaturePad(canvas, {
     minWidth: 3,
     maxWidth: 5,
-    penColor: "rgb(66, 133, 244)"
+    penColor: "rgb(66, 133, 244)",
+    backgroundColor: "rgb(255, 255, 255)"
 });
 
 // Checkboxes, radios, and inputs
