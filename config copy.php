@@ -3,7 +3,7 @@ session_start();
 
 define('SITE_ROOT','https://www.revu.us/');
 define('SITE_PATH','/home/leomb/revu.us/bamqbill/');
-define('FILE_ROOT','/home/leomb/revu.us/bamqbill/');
+define('FILE_ROOT','https://www.revu.us/bamqbill/');
 
 // DB
 define('DB_SERV', 'localhost');
