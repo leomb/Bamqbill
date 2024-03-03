@@ -156,4 +156,33 @@ function getPaymentsOfDay( $day = "" ) {
 	return $rs;
 }
 
+function createPNGFromBase64($base64_content, $output_file) {
+    // Remove data:image/png;base64 from base64 string
+    $base64_content = str_replace('data:image/png;base64,', '', $base64_content);
+
+    // Decode base64 string
+    $image_data = base64_decode($base64_content);
+
+    // Check if the image data is valid
+    if ($image_data === false) {
+        return false; // Return false if the base64 content is invalid
+    }
+
+    // Create image resource from image data
+    $image = imagecreatefromstring($image_data);
+
+    if ($image === false) {
+        return false; // Return false if imagecreatefromstring fails
+    }
+
+    // Save the image to the file
+    $result = imagepng($image, $output_file);
+
+    // Free up memory
+    imagedestroy($image);
+
+    return $result; // Return the result of saving the image
+}
+
+
 ?>
