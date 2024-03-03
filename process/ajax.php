@@ -1,5 +1,4 @@
 <?php
-require_once('../config.php');
 require_once("functions.php");
 
 error_reporting(0);
@@ -284,12 +283,9 @@ $message .= "\r\n--" . $OB . "--\r\n\r\n";
 
 $sent = mail( E_TO, $subject, $message, $headers );
 
-$filedate = date('Y-m-d-H-i-s');
-$folder = FILE_ROOT . "submissions/";
-$filename = $folder  . "aog-" . $filedate . ".html";
-$fp = fopen( $filename, "w");
-fwrite( $fp, $msg );
-fclose( $fp );
+$folder = SITE_PATH . "submissions/";
+$filename = $folder  . $_REQUEST['inv_number'] . "-" . $bill_id . ".html";
+file_put_contents( $filename, $msg );
 
 if ( $sent ) {
     return '{"result":"Email sent."}';
