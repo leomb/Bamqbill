@@ -175,6 +175,12 @@ function createPNGFromBase64($base64_content, $output_file) {
         return false; // Return false if imagecreatefromstring fails
     }
 
+	// remove black background created from transparency
+	$background = imagecolorallocate($image , 0, 0, 0);
+	imagecolortransparent($image, $background);
+	imagealphablending($image, false);
+	imagesavealpha($image, true);
+
     // Save the image to the file
     $result = imagepng($image, $output_file);
 
