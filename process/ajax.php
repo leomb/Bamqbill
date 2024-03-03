@@ -66,7 +66,7 @@ function registerBillAndSend() {
 	$description['oil-apu'] = ["Oil check APU, + Qts. of Oil",$_REQUEST['oil-apu-qt'],$_REQUEST['amount-oil-apu']];
 	$description['fuel'] = [$_REQUEST['fuel'], $_REQUEST['fuel-qty'], $_REQUEST['amount-fuel']];
 	$description['other-service'] = [$_REQUEST['other-service']," ",$_REQUEST['additional-amount']];
-	
+
 	// bundle descriptions for extra non-service fees
 	$x_fees = implode(" + ", $_REQUEST['extrafees'] );
 	$description['extrafees'] = [$x_fees, " ", $_REQUEST['amount-extra']];
@@ -81,10 +81,22 @@ function registerBillAndSend() {
 
 		if ( false === strpos("f_type|operation|request_type|x|_ga|_gid|PHPSESSID", $name) ) {
 			if ( strlen($value) > 0 && $description[$name] !== NULL ) {
-      			$text_message .= str_pad($description[$name][0],35," ") . $description[$name][1] . "  $" . str_pad($description[$name][2],6," ",STR_PAD_LEFT) . "\n";
+      			$text_message .= str_pad($description[$name][0],65," ") . $description[$name][1] . "    $" . str_pad($description[$name][2],8," ",STR_PAD_LEFT) . "\n";
       			$html_message .= "\t\t\t<tr style=\"background: white; margin-bottom: 1px;\">\n\t<td width=\"75%\">" . $description[$name][0] . "</td>\n\t<td width=\"5%\">" . $description[$name][1] . "</td>\n\t<td width=\"20%\" style=\"text-align:right\">" . $description[$name][2] . "</td></tr>\n";
 			}
 		}
+	}
+	
+	$file_root = FILE_ROOT;
+
+	if ( !empty( $_REQUEST['signatureFile'] ) ) { // print signatute on invoice
+		$pngsrc = $_REQUEST['signatureFile'];
+		$invoice = $_REQUEST['inv_number'] . "-" . $bill_id . ".png";
+		saveSig($pngsrc, $invoice); // create the signature png file
+		$caption = "AUTHORIZED BY " . $_REQUEST['customer_name'];
+	} else {
+		$invoice = "pixel.png";
+		$caption = "";
 	}
 
 	$time = date('H:i:s');
@@ -102,11 +114,11 @@ $plaintext = "
 INVOICE " . $_REQUEST['inv_number'] . ":\n\n
 For maintenance work performed on your aircraft #" . $_REQUEST['registration'] . "\n\n" .
 $_REQUEST['customer'] . "\n\n
-DESCRIPTION                        QTY AMNT
------------------------------------------------\n" .
+DESCRIPTION                                                             QTY AMNT
+-------------------------------------------------------------------------------\n" .
 $text_message .
-"----------------------------------------------\n" .
-str_pad("TOTAL",35) . "   " . $total_amount . "\n\n" .
+"------------------------------------------------------------------------------\n" .
+str_pad("TOTAL",65) . "   " . $total_amount . "\n\n" .
 $_REQUEST['notes'] . "\n\n" .
 "Please proceed to pay online securely by using the URL link below.\n\n
 https://bocamx.com/pages/payonline.php \n\n";
@@ -115,13 +127,13 @@ $customer = nl2br($_REQUEST['customer']);
 
 $msg = <<<MSG
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-<!--[if !mso]><!-->
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<!--<![endif]-->
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!--[if !mso]><!-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+	<!--<![endif]-->
     <title>AOG Invoice</title>
 	<!--[if (gte mso 9)|(IE)]>
 	<style type="text/css">
@@ -130,57 +142,79 @@ $msg = <<<MSG
 	<![endif]-->
     <style>
         body { background: #efefef; color: #707070; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;}
-        table { background-color: white; width: 580px; margin: 10px auto; }
+        table { background-color: white; width: 580px; margin: 10px auto; border: 0; }
         td { padding: 5px 20px; }
-        .btn { width: 200px; padding: 15px; margin: 10px auto; background: #283779; color: white; font-weight: bold; text-align: center;}
+        .btn { background: #283779; font-weight: bold; width: 200px; margin: 10px auto; text-align: center; }
+		.btn a { color: white; text-decoration: none; display: inline-block; padding: 15px; }
+		.right { text-align: right; }
+		.sig { max-width: 280px; max-height: 50px; text-align: center; display: relative; }
+		.sig::after { content: $caption; position: absolute; bottem: -12px; left: 0px; font-size: 9px; }
     </style>
 </head>
 <body>
-    <div style="max-width: 600px; margin: auto; background-color: white; padding-top:20px">
+    <table style="max-width: 600px; margin: auto; background-color: white; padding-top:20px">
+		<tr>
+			<td>
         <table>
             <tr>
-                <td><img src="https://bocamx.com/bamqbill/img/BAM-small.svg" alt="BAM logo" style="max-width: 150px"></td>
-                <td>
-                    <p style="text-align: right"><b>INVOICE</b>
-                    <p style="text-align: right;">{$_REQUEST['inv_number']}/$bill_id</p>
+                <td><img src="https://bocamx.com/bamqbill/img/BAM-small.svg" alt="BAM logo" style="max-width: 150px" /></td>
+                <td class="right">
+                    <b>INVOICE</b><br>
+                    {$_REQUEST['inv_number']}-$bill_id
                 </td>
             </tr>
             <tr>
-                <td><p>$customer</p></td>
-                <td><p style="text-align: right;">{$_REQUEST['date']}</p></td>
+                <td>$customer</td>
+                <td class="right">{$_REQUEST['date']}</td>
             </tr>
         </table>
-        <div style="width: 100%; height: 15px;"></div><!-- separation -->
-        <div style="width: 580px; margin: 10px 30px; font-size: 14px; font-style: italic;">
-            <p>For maintenance work performed on your aircraft #{$_REQUEST['registration']}.</p>
-        </div>
-        <div style="background-color: #283779; color: white;">
-            <table style="background-color: transparent; font-size: 12px; padding: 5px 0px;">
-                <tr>
-                    <td width="75%">DESCRIPTION</td>
-                    <td width="5%">QTY</td>
-                    <td width="20%">AMOUNT $</td>
-                </tr>
-            </table>
-        </div>
-        <div style="width: 100%; height: 15px;"></div><!-- separation -->
+		<table>
+			<tr>
+				<td height="15" width="600">&nbsp;</td>
+			<tr>
+		</table>
+		<table>
+			<tr>
+				<td height="15" width="580" margin="20" style="font-style: italic">For maintenance work performed on your aircraft #{$_REQUEST['registration']}.</td>
+			</tr>
+		</table>
+		<table style="background-color: #283779; color: white; font-size: 12px; padding: 5px 0px; margin-bottom: 15px">
+			<tr>
+				<td width="75%">DESCRIPTION</td>
+				<td width="5%">QTY</td>
+				<td width="20%">AMOUNT $</td>
+			</tr>
+		</table>
         <table style="background:#dedede;">
-$html_message          
+$html_message
         </table>
         <table>
             <tr style="border-bottom: 1px solid gray; font-weight: bold;">
-                <td width="75%">TOTAL</td>
-                <td width="5%"></td>
+                <td width="25%">TOTAL</td>
+                <td width="55%"><img class="sig" src="{$file_root}sigs/{$invoice}" alt="$caption" /></td>
                 <td width="20%" style="text-align:right">$total_amount</td>
             </tr>
         </table>
-        <div>
-            $notes
-            <p style="text-align: center;">Please proceed to pay online securely by pressing the button below.</p>
-            <a href="https://bocamx.com/pages/payonline.php" style="text-decoration:none;"><div class="btn">PAY ONLINE</div></a>
-        </div>
-        <div style='width: 100%; height: 30px;'></div><!-- separation -->
-    </div>
+        <table style="margin-bottom: 30px;">
+			<tr>
+            	<td>$notes</td>
+			</tr>
+			<tr>
+            	<td style="text-align: center;">Please proceed to pay online securely by pressing the button below.</td>
+			</tr>
+			<tr>
+				<td>
+					<table style="margin:0 auto; width: 200px;">
+						<tr>
+							<td class="btn"><a href="https://bocamx.com/pages/payonline.php">PAY ONLINE</a></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+        </table>
+			</td>
+		</tr>
+    </table>
 
 </body>
 </html>
@@ -202,8 +236,8 @@ $headers .= "X-Sender: B.A.M. <" . E_FROM . ">\r\n";
 $headers .= "X-Mailer: BAM-MAIL\r\n"; //mailer
 $headers .= "X-Priority: 3\r\n"; //1 UrgentMessage, 3 Normal
 $headers .= "Return-Path: <" . E_FROM . ">\r\n";
-//$headers .= "Cc: " . E_CC . "\r\n";
-//$headers .= "Bcc: " . E_BCC . "\r\n";//
+$headers .= "Cc: " . E_CC . "\r\n";
+$headers .= "Bcc: " . E_BCC . "\r\n";//
 
 $message  = "--" . $OB . "\r\n";
 $message .= "Content-Type: multipart/alternative; boundary=\"" . $IB . "\"\r\n";
@@ -232,7 +266,7 @@ if ( ( isset( $_FILES['attachment'] ) ) && ( $_FILES['attachment']['size'] > 0) 
 	$filename_parts = explode(".", $filename );
 	$filetype = guessFileType( end( $filename_parts) );
 
-	$message .= "\r\n--".$OB."\r\n";
+	$message .= "\r\n--".$IB."\r\n";
 	$message .= "Content-Type: " . $filetype . "; name=\"".$filename."\"\r\n";
 	$message .= "Content-Transfer-Encoding: base64\r\n";
 	$message .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
@@ -251,8 +285,8 @@ $message .= "\r\n--" . $OB . "--\r\n\r\n";
 $sent = mail( E_TO, $subject, $message, $headers );
 
 $filedate = date('Y-m-d-H-i-s');
-$file_root = $_SERVER['DOCUMENT_ROOT'] . "/submissions/";
-$filename = $file_root  . "contact-" . $filedate . ".html";
+$folder = FILE_ROOT . "submissions/";
+$filename = $folder  . "aog-" . $filedate . ".html";
 $fp = fopen( $filename, "w");
 fwrite( $fp, $msg );
 fclose( $fp );
@@ -336,7 +370,7 @@ function createRatesFile() {
 			)
 		)
 	);
-	
+
 	$flatRates = array("qt" => $_REQUEST['qt'],
 		"rts" => array(
 			$_REQUEST['rtsfree'],
@@ -352,12 +386,12 @@ function createRatesFile() {
 			$_REQUEST['jeta'],
 			$_REQUEST['jetaplus'])
 	);
-	
+
 	// Prepare response data
 	$response = array(
 		$varRates, $flatRates
 	);
-	
+
     // Encode the data to JSON format
 	$json_data = json_encode($response, JSON_PRETTY_PRINT);
 
@@ -368,4 +402,20 @@ function createRatesFile() {
 	// Send JSON response
 	header('Content-Type: application/json');
 	echo json_encode($response);
+}
+
+function saveSig($sig, $invoice) {
+	$site_path = SITE_PATH . "sigs/";
+	if (!file_exists($site_path)) {
+		mkdir($site_path, 0777, true);
+	}
+	$filename_parts = $site_path . "/" . $invoice;
+	// create PNG file with sig data
+	$result = createPNGFromBase64($sig, $filename_parts);
+
+	if ($result !== false) {
+		echo 'PNG image created successfully.';
+	} else {
+		echo 'Failed to create PNG image.';
+	}
 }
