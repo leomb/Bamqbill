@@ -191,8 +191,8 @@ $html_message
         <table>
             <tr style="border-bottom: 1px solid gray; font-weight: bold;">
             	<td width="55%"><span class="siglabel">AUTHORIZED: {$_REQUEST['customer_name']}</span><br><img class="sig" src="{$file_root}sigs/{$invoice}" /></td>
-               	<td width="25%">TOTAL</td>
-                <td width="20%" style="text-align:right">$total_amount</td>
+               	<td width="25%" class="right" style="vertical-align: top;">TOTAL</td>
+                <td width="20%" style="text-align:right; vertical-align: top">$total_amount</td>
             </tr>
         </table>
         <table style="margin-bottom: 30px;">
