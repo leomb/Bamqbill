@@ -98,3 +98,10 @@ function loadRates(file) {
 
 const confirmBox = document.getElementById('confirm');
 const closeConfirm = document.getElementById('close-confirm');
+
+const inputFields = document.querySelectorAll('input[type=number]');
+inputFields.forEach( field => {
+    field.addEventListener('change', () => {
+        field.style.backgroundColor = "yellow";
+    })
+});
