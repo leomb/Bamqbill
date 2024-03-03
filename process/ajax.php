@@ -148,7 +148,7 @@ $msg = <<<MSG
 		.btn a { color: white; text-decoration: none; display: inline-block; padding: 15px; }
 		.right { text-align: right; }
 		.sig { max-width: 280px; max-height: 50px; text-align: center; display: relative; }
-		.sig::after { content: $caption; position: absolute; bottem: -12px; left: 0px; font-size: 9px; }
+		.siglabel { font-size: 9px; }
     </style>
 </head>
 <body>
@@ -190,8 +190,8 @@ $html_message
         </table>
         <table>
             <tr style="border-bottom: 1px solid gray; font-weight: bold;">
-                <td width="25%">TOTAL</td>
-                <td width="55%"><img class="sig" src="{$file_root}sigs/{$invoice}" alt="$caption" /></td>
+            	<td width="55%"><span class="siglabel">AUTHORIZED: {$_REQUEST['customer_name']}</span><br><img class="sig" src="{$file_root}sigs/{$invoice}" /></td>
+               	<td width="25%">TOTAL</td>
                 <td width="20%" style="text-align:right">$total_amount</td>
             </tr>
         </table>
