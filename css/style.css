@@ -184,6 +184,21 @@ input[type=number] {
   padding: 2px;
   text-indent: 5px;
 }
+.filelinks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.filelinks a {
+  text-decoration: none;
+  color: var(--bam-blue);
+  padding: 5px 10px;
+  border: 1px solid gray;
+  border-radius: 7px;
+}
+.filelinks a:hover {
+  background-color: var(--bam-blue-50);
+}
 
 /* ==========================================================================
    Helper classes
