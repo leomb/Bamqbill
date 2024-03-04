@@ -6,7 +6,7 @@ numInputs.forEach(numInput => {
             numInput.value = "";
         } else {
             numInput.value = numInput.value * 1.00; // enforce two decimal digits
-        }
+       }
     });
 });
 
@@ -47,6 +47,19 @@ window.addEventListener('load', () => {
     fetch('./bamrates.json')
       .then((response) => response.json())
       .then((json) => loadRates(json)); // get the rates for use in the invoice
+
+    const formData = new FormData();
+    formData.append("operation","listInvoices");
+    formData.append("f_type","request");
+
+    fetch('../process/ajax.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then((response) => response.json())
+    .then(data => {
+        loadFileNames(data)
+    });
 });
 
 function loadRates(file) {
@@ -96,6 +109,21 @@ function loadRates(file) {
     document.getElementById('qt').value = flatRates.qt;
 }
 
+function loadFileNames(json) {
+    var invoiceListing =document.getElementById('invoicefiles');
+    json.forEach(fn => {
+        var lineItem = document.createElement('p');
+        var itemLink = document.createElement('a');
+        var fileNameParts = fn.split("/");
+        var fileName = fileNameParts.pop();
+        itemLink.setAttribute("href", fn);
+        itemLink.setAttribute("target","_blank");
+        itemLink.textContent = fileName;
+        lineItem.appendChild(itemLink) ;
+        invoiceListing.appendChild(lineItem);
+    })
+}
+ 
 const confirmBox = document.getElementById('confirm');
 const closeConfirm = document.getElementById('close-confirm');
 

@@ -415,3 +415,17 @@ function saveSig($sig, $invoice) {
 		echo 'Failed to create PNG image.';
 	}
 }
+
+function listInvoices() {
+	$directory = FILE_PATH . 'submissions';
+
+    // Get list of files in the directory
+    $files = scandir($directory);
+    
+    // Remove . and .. from the list
+    $files = array_diff($files, array('.', '..'));
+    
+    // Return the list of files as JSON
+    echo json_encode($files);
+}
+
