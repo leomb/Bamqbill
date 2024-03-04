@@ -417,7 +417,7 @@ function saveSig($sig, $invoice) {
 }
 
 function listInvoices() {
-	$directory = FILE_PATH . 'submissions';
+	$directory = SITE_PATH . 'submissions';
 
     // Get list of files in the directory
     $files = scandir($directory);
@@ -426,6 +426,6 @@ function listInvoices() {
     $files = array_diff($files, array('.', '..'));
     
     // Return the list of files as JSON
-    echo json_encode($files);
+    return json_encode($files);
 }
 
