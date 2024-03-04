@@ -52,14 +52,15 @@ window.addEventListener('load', () => {
     formData.append("operation","listInvoices");
     formData.append("f_type","request");
 
-    fetch('../process/ajax.php', {
+    fetch('./process/ajax.php', {
         method: 'POST',
         body: formData
     })
     .then((response) => response.json())
-    .then(data => {
+    .then((data) => {
         loadFileNames(data)
-    });
+    })
+    .catch(error => console.error('Error fetching files:', error));
 });
 
 function loadRates(file) {
@@ -111,17 +112,17 @@ function loadRates(file) {
 
 function loadFileNames(json) {
     var invoiceListing =document.getElementById('invoicefiles');
-    json.forEach(fn => {
+    for (const [key, value] of Object.entries(json)) {
         var lineItem = document.createElement('p');
         var itemLink = document.createElement('a');
-        var fileNameParts = fn.split("/");
+        var fileNameParts = value.split("/");
         var fileName = fileNameParts.pop();
-        itemLink.setAttribute("href", fn);
+        itemLink.setAttribute("href", "submissions/" + value);
         itemLink.setAttribute("target","_blank");
-        itemLink.textContent = fileName;
+        itemLink.textContent = fileName.slice(0, -5);
         lineItem.appendChild(itemLink) ;
         invoiceListing.appendChild(lineItem);
-    })
+    }
 }
  
 const confirmBox = document.getElementById('confirm');
