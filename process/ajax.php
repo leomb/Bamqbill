@@ -420,7 +420,7 @@ function listInvoices() {
 	$directory = SITE_PATH . 'submissions';
 
     // Get list of files in the directory
-    $files = scandir($directory);
+    $files = scandir($directory, SCANDIR_SORT_DESCENDING);
     
     // Remove . and .. from the list
     $files = array_diff($files, array('.', '..'));
