@@ -456,7 +456,7 @@ function getData(){
   ajax.addEventListener("load", completeHandlerSms, false);
   ajax.addEventListener("error", errorHandlerSms, false);
   ajax.addEventListener("abort", abortHandlerSms, false);
-  ajax.open("POST", "https://revu.us/bamqbill/process/ajax.php");
+  ajax.open("POST", "../bamqbill/process/ajax.php");
   ajax.send(formdata);
 }
 function completeHandlerSms(event){
