@@ -1,0 +1,36 @@
+{
+    "name": "BAM Billing Application",
+    "short_name": "BAM Bill",
+    "description": "Web application for billing basic routine service tasks on aircraft.",
+    "start_url": "./index.html",
+    "id": "/index.html",
+    "icons": [
+        {
+            "src": "./android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "./bam-maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "./bam-maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "theme_color": "#283779",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

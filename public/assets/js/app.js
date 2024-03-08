@@ -1,9 +1,33 @@
-window.addEventListener('load', () => {
-  getData(); // get the 12 most recent work order authorizations from the database
-  fetch('./bamrates.json')
-    .then((response) => response.json())
-    .then((json) => initRates(json)); // get the rates to use in the invoice
-});
+window.bamBill = (function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+            console.log('Service Worker was registered!')
+        })
+        .catch(err => {
+            console.log("Error while registering Service Worker.");
+        });
+    }
+    
+    return {
+        isOffline: false,
+        init() {
+            getData(); // get the 12 most recent work order authorizations from the database
+            fetch('./data/bamrates.json')
+            .then((response) => response.json())
+            .then((json) => initRates(json)); // get the rates to use in the invoice
+
+            window.addEventListener('offline', e => {
+                this.isOffline = true;
+            });
+
+            window.addEventListener('online', e => {
+                this.isOffline = false;
+            });
+        }
+    }
+  
+})();
 
 // Date function
 function setTodaysDate() {
@@ -432,7 +456,7 @@ function getData(){
   ajax.addEventListener("load", completeHandlerSms, false);
   ajax.addEventListener("error", errorHandlerSms, false);
   ajax.addEventListener("abort", abortHandlerSms, false);
-  ajax.open("POST", "../bamqbill/process/ajax.php");
+  ajax.open("POST", "https://revu.us/bamqbill/process/ajax.php");
   ajax.send(formdata);
 }
 function completeHandlerSms(event){

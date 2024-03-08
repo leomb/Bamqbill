@@ -64,7 +64,7 @@ textarea {
   } 
   label, .section-label {
     font-size: 0.8rem;
-    color: gray;
+    color: #585858;
   }
   .section-label {
     text-transform: uppercase;

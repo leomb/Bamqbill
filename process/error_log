@@ -1,8 +1,0 @@
-[14-Feb-2024 20:58:42 UTC] PHP Warning:  implode(): Invalid arguments passed in /home/leomb/revu.us/bamqbill/process/ajax.php on line 70
-[14-Feb-2024 21:48:46 UTC] PHP Warning:  implode(): Invalid arguments passed in /home/leomb/revu.us/bamqbill/process/ajax.php on line 70
-[14-Feb-2024 22:03:08 UTC] PHP Warning:  implode(): Invalid arguments passed in /home/leomb/revu.us/bamqbill/process/ajax.php on line 70
-[14-Feb-2024 22:10:26 UTC] PHP Warning:  implode(): Invalid arguments passed in /home/leomb/revu.us/bamqbill/process/ajax.php on line 70
-[14-Feb-2024 22:10:26 UTC] PHP Warning:  Use of undefined constant notes - assumed 'notes' (this will throw an Error in a future version of PHP) in /home/leomb/revu.us/bamqbill/process/ajax.php on line 105
-[14-Feb-2024 22:52:50 UTC] PHP Warning:  implode(): Invalid arguments passed in /home/leomb/revu.us/bamqbill/process/ajax.php on line 70
-[14-Feb-2024 22:52:50 UTC] PHP Warning:  Use of undefined constant notes - assumed 'notes' (this will throw an Error in a future version of PHP) in /home/leomb/revu.us/bamqbill/process/ajax.php on line 105
-[15-Feb-2024 03:46:59 UTC] PHP Warning:  Use of undefined constant notes - assumed 'notes' (this will throw an Error in a future version of PHP) in /home/leomb/revu.us/bamqbill/process/ajax.php on line 105
