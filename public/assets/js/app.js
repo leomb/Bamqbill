@@ -1,11 +1,17 @@
 window.bamBill = (function() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-        .then(reg => {
-            console.log('Service Worker was registered!')
-        })
-        .catch(err => {
-            console.log("Error while registering Service Worker.");
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+
+            Notification.requestPermission(status => {
+                if (status === 'granted') {
+                    new Notification('Howdy!');
+                    reg.showNotification('Hello, there')
+                }
+            })
+
+            console.log('Successfully registered');
+        }).catch(err => {
+            console.log('Error while registering SW')
         });
     }
     
