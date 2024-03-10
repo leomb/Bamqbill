@@ -18,10 +18,30 @@ window.bamBill = (function() {
     return {
         isOffline: false,
         init() {
-            getData(); // get the 12 most recent work order authorizations from the database
-            fetch('./data/bamrates.json')
+            //getData(); // get the 12 most recent work order authorizations from the database
+            // get the 12 most recent work order authorizations from the database
+            let formData = new FormData(); 
+            formData.append("operation","getAuthorizations");
+            formData.append("f_type","request");
+
+            fetch("./process/ajax.php",
+                {
+                    body: formData,
+                    method: "post"
+                })
+                .then((response) => response.json())
+            .then((json) => createCustomerDropdown(json))
+            .catch(err => {
+                console.log('Error getting Authorizations.')
+            });
+
+             // get the rates to use in the invoice
+             fetch('./data/bamrates.json')
             .then((response) => response.json())
-            .then((json) => initRates(json)); // get the rates to use in the invoice
+            .then((json) => initRates(json))
+            .catch(err => {
+                console.log('Error getting bamrates.')
+            });
 
             window.addEventListener('offline', e => {
                 this.isOffline = true;
@@ -478,14 +498,13 @@ function abortHandlerSms(event){
 }
 
 function createCustomerDropdown(data) {
-  const dataArray = JSON.parse(data);
   const dropdown = document.getElementById('authorizations');
   dropdown.innerHTML = "";
   const firstOption = document.createElement('option');
   firstOption.setAttribute("selected","");
   firstOption.innerHTML = "Please choose...";
   dropdown.appendChild(firstOption);
-  dataArray.forEach( (customer, idx) => {
+  data.forEach( (customer, idx) => {
     let option = document.createElement('option');
     option.value = customer.id;
     option.innerHTML = customer.registration;
