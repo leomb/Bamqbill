@@ -11,13 +11,13 @@ numInputs.forEach(numInput => {
 });
 
 function sendData(formData) {
-    fetch('../bamqbill/process/ajax.php', {
+    fetch('./process/ajax.php', {
         method: 'POST',
         body: formData
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Network not responding. We are probably offline.');
         }
         return response.json();
     })
@@ -30,6 +30,7 @@ function sendData(formData) {
         // Handle errors
         console.error('There was a problem with the fetch operation:', error);
     });
+    removeInputHighlights();
 }
 
 const form = document.forms[0];
@@ -44,10 +45,13 @@ form.addEventListener('submit', function(event) {
 
 // Load rates from the bamrates.json file into the form
 window.addEventListener('load', () => {
-    fetch('./bamrates.json')
-      .then((response) => response.json())
-      .then((json) => loadRates(json)); // get the rates for use in the invoice
 
+    // get the rates for use in the invoice
+    fetch('./data/bamrates.json')
+      .then((response) => response.json())
+      .then((json) => loadRates(json)); 
+
+    // get the list of the most recent invoices
     const formData = new FormData();
     formData.append("operation","listInvoices");
     formData.append("f_type","request");
@@ -58,7 +62,7 @@ window.addEventListener('load', () => {
     })
     .then((response) => response.json())
     .then((data) => {
-        loadFileNames(data)
+        loadFileNames(data);
     })
     .catch(error => console.error('Error fetching files:', error));
 });
@@ -134,3 +138,10 @@ inputFields.forEach( field => {
         field.style.backgroundColor = "yellow";
     })
 });
+
+function removeInputHighlights() {
+    inputFields.forEach( field => {
+        field.style.backgroundColor = "white";
+    });
+}
+
