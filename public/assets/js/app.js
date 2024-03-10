@@ -223,6 +223,7 @@ origin.addEventListener("change", () => {
     var newRate = varRates[country][laborRate];
     console.log(`Changed origin: ${country}, ${laborRate}`);
     updateLabor(newRate);
+    updateOrigin(newRate);
 });
 
 rts.forEach(radio => {
@@ -452,6 +453,17 @@ function updateLabor(rates) {
         }
     });
     updateTotal();
+}
+
+function updateOrigin(rates) {
+    country = document.forms[0].outOfCountry.value == "ON" ? "foreign" : "usa";
+    setVariableCosts(rates);
+    // if AOG Callout is checked:
+    if ( document.getElementById('aog').checked ) {
+        const aog_amount = document.getElementById('amount-aog');
+        aog_amount.textContent = Number(rates.aog).toFixed(2);
+        updateTotal();
+    }
 }
 
 function updateTotal() {
