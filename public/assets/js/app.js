@@ -14,34 +14,33 @@ window.bamBill = (function() {
             console.log('Error while registering SW')
         });
     }
-    
+ 
+    // get the 12 most recent work order authorizations from the database
+    let formData = new FormData(); 
+    formData.append("operation","getAuthorizations");
+    formData.append("f_type","request");
+    fetch("./process/ajax.php",
+        {
+            body: formData,
+            method: "post"
+        })
+        .then((response) => response.json())
+    .then((json) => createCustomerDropdown(json))
+    .catch(err => {
+        console.log('Error getting Authorizations.')
+    });
+
+    // get the rates to use in the invoice
+    fetch('./data/bamrates.json')
+    .then((response) => response.json())
+    .then((json) => initRates(json))
+    .catch(err => {
+        console.log(`Error getting bamrates: ${err}`)
+    });
+     
     return {
         isOffline: false,
         init() {
-            //getData(); // get the 12 most recent work order authorizations from the database
-            // get the 12 most recent work order authorizations from the database
-            let formData = new FormData(); 
-            formData.append("operation","getAuthorizations");
-            formData.append("f_type","request");
-
-            fetch("./process/ajax.php",
-                {
-                    body: formData,
-                    method: "post"
-                })
-                .then((response) => response.json())
-            .then((json) => createCustomerDropdown(json))
-            .catch(err => {
-                console.log('Error getting Authorizations.')
-            });
-
-             // get the rates to use in the invoice
-             fetch('./data/bamrates.json')
-            .then((response) => response.json())
-            .then((json) => initRates(json))
-            .catch(err => {
-                console.log('Error getting bamrates.')
-            });
 
             window.addEventListener('offline', e => {
                 this.isOffline = true;
