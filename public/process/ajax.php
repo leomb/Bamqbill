@@ -392,7 +392,7 @@ function createRatesFile() {
 	$json_data = json_encode($response, JSON_PRETTY_PRINT);
 
 	// Write a file with the json object
-	$file = '../bamrates.json';
+	$file = SITE_PATH . 'data/bamrates.json';
 	file_put_contents($file, $json_data);
 
 	// Send JSON response
