@@ -16,7 +16,6 @@ const preCache = [{
     name: dynamicCacheName,
     urls: [
         './data/bamrates.json',
-        './data/varRates.json',
     ]
 }];
 
