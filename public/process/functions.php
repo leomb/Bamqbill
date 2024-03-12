@@ -14,13 +14,14 @@ if ($conn->connect_error) {
 }
 
 $newsql = "CREATE TABLE IF NOT EXISTS `quickbill` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) AUTO_INCREMENT NOT NULL,
   `inv_number` varchar(30) NOT NULL,
   `inv_date` date NOT NULL,
   `inv_amount` decimal(8,2) NOT NULL,
   `registration` varchar(10) NOT NULL,
   `inv_data` text NOT NULL COMMENT 'json-encoded',
-  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='for mobile app';
 ";
 
@@ -138,7 +139,7 @@ function addPayment( $payment ) {
 	return;
 }
 
-function getPayments( $startat = 0, $lines ) {
+function getPayments( $line, $startat = 0) {
 	global $conn;
 
 
@@ -197,13 +198,14 @@ function createPNGFromBase64($base64_content, $output_file) {
 // ============================================================================= //
 
 $usersql = "CREATE TABLE IF NOT EXISTS `users` (
-	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`id` int(11) AUTO_INCREMENT NOT NULL,
 	`full_name` varchar(30) NOT NULL,
 	`email` varchar(30) NOT NULL,
 	`pw_hash` varchar(255) NOT NULL,
 	`user_role` ENUM('USER','BOSS'),
 	`active` TINYINT(1),
-	`modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+	`modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	primary key (id)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='for mobile app';
   ";
   
