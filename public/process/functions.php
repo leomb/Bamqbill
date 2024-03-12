@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 $newsql = "CREATE TABLE IF NOT EXISTS `quickbill` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `inv_number` varchar(30) NOT NULL,
   `inv_date` date NOT NULL,
   `inv_amount` decimal(8,2) NOT NULL,
@@ -188,6 +188,79 @@ function createPNGFromBase64($base64_content, $output_file) {
     imagedestroy($image);
 
     return $result; // Return the result of saving the image
+}
+
+// ===========================  USERS DATABASE TABLE =========================== //
+//                                                                               //
+//                         Logins to use AOG Billing App                         //
+//                                                                               //
+// ============================================================================= //
+
+$usersql = "CREATE TABLE IF NOT EXISTS `users` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`full_name` varchar(30) NOT NULL,
+	`email` varchar(30) NOT NULL,
+	`pw_hash` varchar(255) NOT NULL,
+	`user_role` ENUM('USER','BOSS'),
+	`active` TINYINT(1),
+	`modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='for mobile app';
+  ";
+  
+  $result = mysqli_query($conn, $usersql);
+
+
+// Function to create a new login record
+function createLogin($full_name, $email, $encrypted_password, $user_role, $active, $changed) {
+    global $conn;
+    $sql = "INSERT INTO logins (full_name, email, pw_hash, user_role, active, changed) VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssss", $full_name, $email, $encrypted_password, $role, $active, $changed);
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Function to read login records
+function readLogins() {
+    global $conn;
+    $sql = "SELECT * FROM logins";
+    $result = $conn->query($sql);
+    $logins = array();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $logins[] = $row;
+        }
+    }
+    return $logins;
+}
+
+// Function to update a login record
+function updateLogin($id, $full_name, $email, $encrypted_password, $user_role, $active, $date) {
+    global $conn;
+    $sql = "UPDATE logins SET full_name=?, email=?, pw_hash=?, user_role=?, active=?, changed=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssi", $full_name, $email, $encrypted_password, $role, $active, $changed, $id);
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Function to delete a login record
+function deleteLogin($id) {
+    global $conn;
+    $sql = "DELETE FROM logins WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
