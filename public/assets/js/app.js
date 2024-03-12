@@ -350,7 +350,7 @@ locations.forEach( loc => {
         const location = loc.value;
         const invoiceDate = document.getElementById('date').value.substring(5);
         const invoiceName = "INV" + document.getElementById('date').value.substring(5,2);
-        document.getElementById('invoice-number').innerHTML = invoiceName + invoiceDate + "/" + location;
+        document.getElementById('invoice-number').innerHTML = invoiceName + invoiceDate + location;
         setHiddenField('inv_number', document.getElementById('invoice-number').innerHTML);
     })
 })
