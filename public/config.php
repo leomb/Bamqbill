@@ -1,15 +1,15 @@
 <?php
 session_start();
 
-define('SITE_ROOT','localhost:8080/bamqbill/');
-define('SITE_PATH','localhost:8080/bamqbill/');
-define('FILE_ROOT','localhost:8080/bamqbill/');
+define('SITE_ROOT','localhost:5501/bamqbill/');
+define('SITE_PATH','localhost:5501/bamqbill/');
+define('FILE_ROOT','localhost:5501/bamqbill/');
 
 // DB
 define('DB_SERV', 'localhost');
 define('DB_USER', 'root');
-define('DB_PASS', 'mia33187');
-define('DB_NAME', 'ams');
+define('DB_PASS', 'Hfs-6ht3puhjUe!iryG@');
+define('DB_NAME', 'dev');
 
 // EMAIL
 define('E_TO', 'lborsten@mac.com');
