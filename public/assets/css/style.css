@@ -203,6 +203,10 @@ input[type=number] {
 .filelinks a:hover {
   background-color: var(--bam-blue-50);
 }
+.text-muted {
+  font-size: 0.8em;
+  font-style: italic;
+}
 
 /* ==========================================================================
    Helper classes
