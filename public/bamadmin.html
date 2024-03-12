@@ -285,29 +285,84 @@
             </div>
             <div class="row my-5">
                 <div class="col text-center">
-                    <button type="button" class="btn btn-primary" onclick="alert('Under development.')">Add new user</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('newuser').showModal()">Add new user</button>
                 </div>
             </div>
         </div>
     </div>
     
     <dialog id="confirm">
-      <div>
+      <div class="container">
         <div class="row">
           <div class="col text-center">
             <h2 class="my-5">Updated!</h2>
             <p class="my-5 px-5">The rates data have been updated successfully.</p>
           </div>
         </div>
-        <fiv>
-          <div class="row">
+        <div class="row">
             <div class="col text-center">
-              <button id="close-confirm" class="btn btn-primary" onclick="confirmBox.close()">OK</button>
+                <button id="close-confirm" class="btn btn-primary" onclick="confirmBox.close()">OK</button>
             </div>
-          </div>
-        </fiv>
+        </div>
       </div>
     </dialog>
+
+    <dialog id="newuser">
+        <div class="container">
+          <div class="row">
+            <div class="col text-center">
+              <h2 class="my-5">Add New User</h2>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Name</label>
+            <input
+                type="text"
+                name="fullname "
+                id="fullname"
+                class="form-control"
+                placeholder="Full Name"
+                aria-describedby="helpIdName."
+            />
+            <small id="helpIdName" class="text-muted">First and last name.</small>
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Email</label>
+            <input
+                type="email"
+                name="email"
+                id="email"
+                class="form-control"
+                placeholder="Email address"
+                aria-describedby="helpIdEmail"
+            />
+            <small id="helpIdEmail" class="text-muted">Email address = user name.</small>
+          </div>
+          <div class="mb-3">
+            <label for="" class="form-label">Password</label>
+            <input
+                type="password"
+                class="form-control"
+                name="pw"
+                id="pw"
+                placeholder="Password"
+            />
+          </div>
+          
+          
+          
+          <div class="row">
+              <button
+                type="submit"
+                class="btn btn-primary"
+              >
+                Submit
+              </button>
+              
+          </div>
+        </div>
+    </dialog>
+  
 
     <script src="assets/js/admin.js"></script>     
 </body>
