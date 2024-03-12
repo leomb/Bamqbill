@@ -27,7 +27,7 @@ window.bamBill = (function() {
         .then((response) => response.json())
     .then((json) => createCustomerDropdown(json))
     .catch(err => {
-        console.log('Error getting Authorizations.')
+        console.log(`Error getting Authorizations. ${err}`)
     });
 
     // get the rates to use in the invoice
