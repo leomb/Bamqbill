@@ -5,7 +5,7 @@ numInputs.forEach(numInput => {
         if ( numInput.value === "") {
             numInput.value = "";
         } else {
-            numInput.value = numInput.value * 1.00; // enforce two decimal digits
+            numInput.value = Number(numInput.value * 1.00).toFixed(2); // enforce two decimal digits
        }
     });
 });
