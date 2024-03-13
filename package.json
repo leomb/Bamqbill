@@ -21,5 +21,8 @@
     "webpack-merge": "^5.9.0"
   },
   "main": "webpack.common.js",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "signature_pad": "^4.2.0"
+  }
 }
