@@ -255,7 +255,7 @@ $message .= "Content-Transfer-Encoding: quoted-printable\r\n\r\n";
 
 ## html section begins
 $message .= $msg;
-
+$message = wordwrap($message, 76, "\r\n");
 $message .= "\r\n--" . $IB . "--\r\n";
 
 /**/
