@@ -97,6 +97,7 @@ function registerBillAndSend() {
 		$invoice = "pixel.png";
 		$caption = "";
 	}
+	$signatureAlt = "Signature";
 
 	$time = date('H:i:s');
 	$sent = 0;
