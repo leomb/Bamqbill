@@ -155,7 +155,7 @@ $msg = <<<MSG
     <table style="max-width: 600px; margin: auto; background-color: white; padding-top:20px">
 		<tr>
 			<td>
-        <table>
+		<table border="0" cellpadding="0" cellspacing="0" role="presentation">
             <tr>
                 <td><img src="https://bocamx.com/bamqbill/img/BAM-small.svg" alt="BAM logo" style="max-width: 150px" /></td>
                 <td class="right">
@@ -168,12 +168,12 @@ $msg = <<<MSG
                 <td class="right">{$_REQUEST['date']}</td>
             </tr>
         </table>
-		<table>
+		<table border="0" cellpadding="0" cellspacing="0" role="presentation">
 			<tr>
 				<td height="15" width="600">&nbsp;</td>
 			<tr>
 		</table>
-		<table>
+		<table border="0" cellpadding="0" cellspacing="0" role="presentation">
 			<tr>
 				<td height="15" width="580" margin="20" style="font-style: italic">For maintenance work performed on your aircraft #{$_REQUEST['registration']}.</td>
 			</tr>
