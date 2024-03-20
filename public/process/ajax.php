@@ -152,7 +152,7 @@ $msg = <<<MSG
     </style>
 </head>
 <body>
-    <table style="max-width: 600px; margin: auto; background-color: white; padding-top:20px">
+    <table border="0" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#ffffff" style="max-width: 600px; margin: auto; background-color: white; padding-top:20px">
 		<tr>
 			<td>
 		<table border="0" cellpadding="0" cellspacing="0" role="presentation">
