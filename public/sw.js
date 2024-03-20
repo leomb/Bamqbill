@@ -1,4 +1,4 @@
-const version = '4';
+const version = '5';
 const staticCacheName = `static-v${version}`;
 const dynamicCacheName = `dynamic-v${version}`;
 
@@ -10,7 +10,10 @@ const preCache = [{
         './assets/css/bootstrap.min.css',
         './assets/css/style.css',
         './assets/img/BAM-small.svg',
-        './assets/js/app.js'
+        './assets/js/app.js',
+        './assets/js/bootstrap.min.js',
+        './assets/js/signature_pad.umd.js',
+        './process/ajax.php'
     ]
 },{
     name: dynamicCacheName,
