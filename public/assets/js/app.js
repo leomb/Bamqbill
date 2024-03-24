@@ -150,6 +150,7 @@ const otherService = document.getElementById('additional-amount');
 const largeCabin = document.getElementById('largeCabin');
 const origin = document.getElementById('outOfCountry');
 const form = document.forms[0];
+const SALESTAX = 0.07;
 
 function setHiddenField(name, value) {
     if ( undefined === form[name] ) {
@@ -257,7 +258,12 @@ fuel.forEach(gas => {
 qtyfuel.addEventListener("change", () => {
     let operation = "*";
     let gas = document.querySelector('input[name="fuel"]:checked');
-    calculateBill(Number(Number(gas.dataset['cost']) * Number(qtyfuel.value)), gas.dataset['display'], operation);
+    let salestax = Number(gas.dataset['cost'] * SALESTAX);
+    let salesTaxSpan = document.getElementById('salestax');
+    salesTaxSpan.textContent = qtyfuel.value == 0 ? "" : "(Includes 7% sales tax: $" + Number(salestax * qtyfuel.value).toFixed(2) + ")";
+    let fuelPlusTax = Number(gas.dataset['cost']) + Number(salestax);
+    calculateBill(Number(fuelPlusTax * Number(qtyfuel.value)), gas.dataset['display'], operation);
+    setHiddenField("fuelsalestax", Number(salestax * Number(qtyfuel.value)).toFixed(2));
 });
 
 qtylabor.addEventListener("change", () => {
