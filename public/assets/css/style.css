@@ -157,7 +157,12 @@ textarea {
   #txInvoice, #txCustEmail {
     font-weight: bold;
   }
-
+  .salestax {
+    font-size: 0.8em;
+    color: red;
+    font-style: italic;
+    margin-left: 2em;
+  }
 
 /* ==========================================================================
    Admin page
