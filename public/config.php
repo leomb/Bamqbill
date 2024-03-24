@@ -2,7 +2,7 @@
 session_start();
 
 define('SITE_ROOT','localhost:5501/bamqbill/');
-define('SITE_PATH','/Applications/mampstack-8.0.12-0/apache2/htdocs/bamqbill/');
+define('SITE_PATH','/Applications/mampstack-8.0.12-0/apache2/htdocs/bamqbill/public/');
 define('FILE_ROOT','localhost:5501/bamqbill/');
 
 // DB
