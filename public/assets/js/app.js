@@ -5,13 +5,13 @@ window.bamBill = (function() {
             Notification.requestPermission(status => {
                 if (status === 'granted') {
                     new Notification('Howdy!');
-                    reg.showNotification('Hello, there')
+                    reg.showNotification('Hello, there');
                 }
             })
 
-            console.log('Successfully registered');
+            console.log('Service Worker successfully registered');
         }).catch(err => {
-            console.log('Error while registering SW')
+            console.log('Error while registering Service Worker');
         });
     }
  
@@ -37,20 +37,18 @@ window.bamBill = (function() {
     .catch(err => {
         console.log(`Error getting bamrates: ${err}`)
     });
-     
-    return {
-        isOffline: false,
-        init() {
 
-            window.addEventListener('offline', e => {
-                this.isOffline = true;
-            });
+    const isOffline = false;
+    window.addEventListener('offline', e => {
+        isOffline = true;
+        console.log('We are offline.');
+    });
 
-            window.addEventListener('online', e => {
-                this.isOffline = false;
-            });
-        }
-    }
+    window.addEventListener('online', e => {
+        isOffline = false;
+        console.log('We are online.');
+    });
+
   
 })();
 
@@ -147,8 +145,9 @@ const laborBase = document.querySelectorAll('input[name=labor]');
 const rts = document.querySelectorAll('input[name=rts]');
 const fuel = document.querySelectorAll('input[name=fuel');
 const qtyfuel = document.getElementById('fuel-qty');
-const otherChecks = document.querySelectorAll('input[name="aog"],input[name="extrafees[]"],input[name="o2-service"]');
+const otherChecks = document.querySelectorAll('input[name="callout"],input[name="extrafees[]"],input[name="o2-service"]');
 const otherService = document.getElementById('additional-amount');
+const largeCabin = document.getElementById('largeCabin');
 const origin = document.getElementById('outOfCountry');
 const form = document.forms[0];
 
@@ -205,12 +204,21 @@ laborBase.forEach(base => {
         var qty = document.getElementById("labor-hrs");
         document.getElementById("amount-labor").innerHTML = "";
         laborRate = base.value;
-        qty.dataset['cost'] = varRates[country][laborRate].hrs;
+        if ( largeCabin.checked ) {
+            qty.dataset['cost'] = varRates[country][laborRate].aog;
+        } else {
+            qty.dataset['cost'] = varRates[country][laborRate].hrs;
+        }
         let operation = "*";
         calculateBill(Number(qty.dataset['cost'] * qty.value), qty.dataset['display'], operation);
         var newRate = varRates[country][laborRate];
         updateInvoice(newRate);
     });
+});
+
+largeCabin.addEventListener("change", () => {
+    updateLabor(varRates[country][laborRate]);
+    updateOrigin(varRates[country][laborRate]);
 });
 
 origin.addEventListener("change", () => {
@@ -421,8 +429,13 @@ function setOilCosts(rates) {
 }
 
 function setVariableCosts(rates) {
-    document.getElementById('aog').dataset['cost'] = rates.aog;
-    document.getElementById('labor-hrs').dataset['cost'] = rates.hrs;
+    if ( largeCabin.checked ) {
+        document.getElementById('callout').dataset['cost'] = rates.aog * 4;
+        document.getElementById('labor-hrs').dataset['cost'] = rates.aog;
+    } else {
+        document.getElementById('callout').dataset['cost'] = rates.hrs * 4;
+        document.getElementById('labor-hrs').dataset['cost'] = rates.hrs;
+    }
     document.getElementById('o2-service').dataset['cost'] = rates.o2;
     document.getElementById('oil-engine1').dataset['cost'] = rates.oil;
     document.getElementById('oil-engine2').dataset['cost'] = rates.oil;
@@ -458,10 +471,14 @@ function updateLabor(rates) {
 function updateOrigin(rates) {
     country = document.forms[0].outOfCountry.value == "ON" ? "foreign" : "usa";
     setVariableCosts(rates);
-    // if AOG Callout is checked:
-    if ( document.getElementById('aog').checked ) {
-        const aog_amount = document.getElementById('amount-aog');
-        aog_amount.textContent = Number(rates.aog).toFixed(2);
+    // if Callout is checked:
+    if ( document.getElementById('callout').checked ) {
+        const callout_amount = document.getElementById('amount-callout');
+        if ( largeCabin.checked ) {
+            callout_amount.textContent = Number(rates.aog * 4).toFixed(2);
+        } else {
+            callout_amount.textContent = Number(rates.hrs * 4).toFixed(2);
+        }
         updateTotal();
     }
 }
