@@ -1,4 +1,4 @@
-const version = '5';
+const version = '9';
 const staticCacheName = `static-v${version}`;
 const dynamicCacheName = `dynamic-v${version}`;
 
@@ -11,14 +11,15 @@ const preCache = [{
         './assets/css/style.css',
         './assets/img/BAM-small.svg',
         './assets/js/app.js',
-        './assets/js/bootstrap.min.js',
-        './assets/js/signature_pad.umd.js',
+        './assets/js/vendor/bootstrap.min.js',
+        './assets/js/vendor/signature_pad.umd.js',
         './process/ajax.php'
     ]
 },{
     name: dynamicCacheName,
     urls: [
         './data/bamrates.json',
+        './sigs/pixel.png'
     ]
 }];
 
@@ -53,6 +54,7 @@ async function getResponseFor(req) {
     let cacheRes = await staticCache.match(req);
 
     if (cacheRes) {
+        console.log('got response for static cache.')
         return cacheRes;
     }
 
@@ -68,6 +70,7 @@ async function getResponseFor(req) {
 
         return res;
     } catch (err) {
+        console.log('Got no response no response from dynamic cache.');
         return await addCacheHeader(await dynCache.match(req));
     }
 }
@@ -85,6 +88,7 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', e => {
+    console.log('Service Worker activated.');
     e.waitUntil(clearOldCache(preCache.map(obj => obj.name)));
 });
 
