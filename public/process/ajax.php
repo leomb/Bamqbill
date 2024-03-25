@@ -56,7 +56,7 @@ function registerBillAndSend() {
 	$description = [];
 
 	$description['outOfCountry'] = ["Out of country"," ",$_REQUEST['outOfCountry']]; // <-No dollar amount
-	$description['aog'] = ["AOG Callout"," ",$_REQUEST['amount-aog']];
+	$description['aog'] = ["Callout"," ",$_REQUEST['amount-callout']];
 	$description['labor-hrs'] = ["Hours of labor",$_REQUEST['labor-hrs'],$_REQUEST['amount-labor']];
 	$description['o2-service'] = ["Oxygen service"," ",$_REQUEST['o2amount']];
 	$description['oil-engine1'] = ["Oil check Engine 1, + Qts. of Oil",$_REQUEST['oil-qt1'],$_REQUEST['amount-eng-oil1']];
@@ -65,6 +65,7 @@ function registerBillAndSend() {
 	$description['oil-apu'] = ["Oil check APU, + Qts. of Oil",$_REQUEST['oil-apu-qt'],$_REQUEST['amount-oil-apu']];
 	$description['fuel'] = [$_REQUEST['fuel'], $_REQUEST['fuel-qty'], $_REQUEST['amount-fuel']];
 	$description['other-service'] = [$_REQUEST['other-service']," ",$_REQUEST['additional-amount']];
+	$description['fuelsalestax'] = ["Fuel Sales Tax (7%):",$_REQUEST['fuelsalestax'],""];
 
 	// bundle descriptions for extra non-service fees
 	$x_fees = implode(" + ", $_REQUEST['extrafees'] );
@@ -105,6 +106,7 @@ function registerBillAndSend() {
 	$total_amount = numfmt_format_currency( $fmt, $_REQUEST['inv_total'], "USD");
 	$notes = $_REQUEST['notes'] > "" ? "<p style=\"color: red; padding: 20px;\">" . $_REQUEST['notes'] . "</p>" :"";
     //return '{"result":"' . $$name . '"}';
+	$pay_button_link = "https://bocamx.com/pages/payonline.php?inv={$_REQUEST['inv_number']}&amt={$total_amount}&reg={$_REQUEST['registration']}";
 
 	if ( $_REQUEST['f_type'] == "request" ) {
 
@@ -206,7 +208,7 @@ $html_message
 				<td>
 					<table style="margin:0 auto; width: 200px;">
 						<tr>
-							<td class="btn"><a href="https://bocamx.com/pages/payonline.php">PAY ONLINE</a></td>
+							<td class="btn"><a href="{$pay_button_link}">PAY ONLINE</a></td>
 						</tr>
 					</table>
 				</td>
