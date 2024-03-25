@@ -47,7 +47,7 @@ function addInvoice2DB( $request ) {
 	$request['inv_total'] . ", '" . 
 	$request['registration'] . "', '" . 
 	mysqli_real_escape_string( $conn, json_encode($request) ) . "',
-	NULL)";
+	CURRENT_TIMESTAMP)";
 	
 	$rs = $conn->query( $sql ) or die ("Insert error: " . mysqli_error( $conn ));
 
