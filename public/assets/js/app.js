@@ -320,7 +320,7 @@ function environmentalSum() {
     totalSum -= Number(document.getElementById('amount-fuel').textContent);
     totalSum -= Number(document.getElementById('environmentFee').textContent);
 
-    return Number(totalSum * 0.07);
+    return Number(totalSum * 0.075);
 }
 
 // Dialog window for signature
