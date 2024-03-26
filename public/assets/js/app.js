@@ -450,6 +450,7 @@ function setVariableCosts(rates) {
 }
 
 function updateInvoice(rates) {
+    // Used when Labor changes weekday/overtime/holiday
     setVariableCosts(rates);
     const variableElements = ['oil-engine1','oil-engine2','oil-engine3','oil-apu','o2-service'];
     variableElements.forEach(elm => {
