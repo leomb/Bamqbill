@@ -116,10 +116,10 @@ $plaintext = "
 INVOICE " . $_REQUEST['inv_number'] . ":\n\n
 For maintenance work performed on your aircraft #" . $_REQUEST['registration'] . "\n\n" .
 $_REQUEST['customer'] . "\n\n
-DESCRIPTION                                                             QTY AMNT
--------------------------------------------------------------------------------\n" .
+DESCRIPTION                                                      QTY AMNT
+------------------------------------------------------------------------\n" .
 $text_message .
-"------------------------------------------------------------------------------\n" .
+"-----------------------------------------------------------------------\n" .
 str_pad("TOTAL",65) . "   " . $total_amount . "\n\n" .
 $_REQUEST['notes'] . "\n\n" .
 "Please proceed to pay online securely by using the URL link below.\n\n
