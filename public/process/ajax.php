@@ -106,7 +106,7 @@ function registerBillAndSend() {
 	$total_amount = numfmt_format_currency( $fmt, $_REQUEST['inv_total'], "USD");
 	$notes = $_REQUEST['notes'] > "" ? "<p style=\"color: red; padding: 20px;\">" . $_REQUEST['notes'] . "</p>" :"";
     //return '{"result":"' . $$name . '"}';
-	$pay_button_link = "https://bocamx.com/pages/payonline.php?inv={$_REQUEST['inv_number']}&amt={$total_amount}&reg={$_REQUEST['registration']}";
+	$pay_button_link = "https://bocamx.com/pages/payonline.php?inv={$_REQUEST['inv_number']}&amt={$_REQUEST['inv_total']}&reg={$_REQUEST['registration']}";
 
 	if ( $_REQUEST['f_type'] == "request" ) {
 
@@ -123,7 +123,7 @@ $text_message .
 str_pad("TOTAL",65) . "   " . $total_amount . "\n\n" .
 $_REQUEST['notes'] . "\n\n" .
 "Please proceed to pay online securely by using the URL link below.\n\n
-https://bocamx.com/pages/payonline.php \n\n";
+{$pay_button_link}\n\n";
 
 $customer = nl2br($_REQUEST['customer']);
 
