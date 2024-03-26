@@ -65,7 +65,7 @@ function registerBillAndSend() {
 	$description['oil-apu'] = ["Oil check APU, + Qts. of Oil",$_REQUEST['oil-apu-qt'],$_REQUEST['amount-oil-apu']];
 	$description['fuel'] = [$_REQUEST['fuel'], $_REQUEST['fuel-qty'], $_REQUEST['amount-fuel']];
 	$description['other-service'] = [$_REQUEST['other-service']," ",$_REQUEST['additional-amount']];
-	$description['fuelsalestax'] = ["Fuel Sales Tax (7%):",$_REQUEST['fuelsalestax'],""];
+	$description['fuelsalestax'] = ["Fuel Sales Tax (7%) included:",$_REQUEST['fuelsalestax'],""];
 
 	// bundle descriptions for extra non-service fees
 	$x_fees = implode(" + ", $_REQUEST['extrafees'] );
