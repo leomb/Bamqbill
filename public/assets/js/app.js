@@ -297,6 +297,8 @@ function calculateBill(amt, display, operation) {
     }
     if ( amountDisplay.innerHTML == "0.00" ) amountDisplay.innerHTML = "";
 
+    document.getElementById('environmentFee').textContent = Number(environmentalSum()).toFixed(2);
+
     updateTotal();
     
     if ( undefined === form[display]) {
@@ -311,6 +313,15 @@ function calculateBill(amt, display, operation) {
     }
 }
 
+function environmentalSum() {
+    var totalSum = sumAmounts();
+
+    // remove Fuel amount and environmental fee amount
+    totalSum -= Number(document.getElementById('amount-fuel').textContent);
+    totalSum -= Number(document.getElementById('environmentFee').textContent);
+
+    return Number(totalSum * 0.07);
+}
 
 // Dialog window for signature
 const dialog = document.querySelector('dialog#sig');
@@ -490,14 +501,18 @@ function updateOrigin(rates) {
     }
 }
 
-function updateTotal() {
+function sumAmounts() {
     var totalSum = 0.00;
-    // sum all amounts
     const amounts = document.querySelectorAll('.amount');
     amounts.forEach( charge => {
         totalSum += Number(charge.innerHTML);
     });
-    totalSum += Number(otherService.value);
+    return totalSum += Number(otherService.value);
+}
+
+function updateTotal() {
+    var totalSum = sumAmounts();
+  
     totalSum = totalSum.toFixed(2);
     let USDollar = new Intl.NumberFormat('en-US', {
         style: 'currency',
