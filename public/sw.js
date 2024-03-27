@@ -96,9 +96,11 @@ self.addEventListener('fetch', e => {
     e.respondWith(
         getResponseFor(e.request)
     );
+});
 
-    // e.respondWith(
-    //     caches.match(e.request)
-    //     .then(res => addCacheHeader(res) || fetch(e.request))
-    // );
+self.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        console.log('APP resumed');
+        window.location.reload();
+    }
 });
